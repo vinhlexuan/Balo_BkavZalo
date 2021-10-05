@@ -1,68 +1,78 @@
 import 'package:flutter/material.dart';
 
-Widget loginForm(BuildContext context) {
-  return Container(
-    padding: const EdgeInsets.all(32),
-    child: Column(
-      children: <Widget>[
-        Container(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: const TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Số điện thoại',
-              ),
-            )),
-        Container(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: const TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Mật khẩu',
-              ),
-            )),
-      ],
-    ),
-  );
-}
-
-Widget bottomButton(BuildContext context) {
-  return Align(
-      alignment: Alignment.bottomRight,
-      child: ElevatedButton(
-        onPressed: () {},
-        child: const Icon(Icons.arrow_forward_rounded, color: Colors.white),
-        style: ElevatedButton.styleFrom(
-          shape: const CircleBorder(),
-          padding: const EdgeInsets.all(20),
-          primary: Colors.blue, // <-- Button color
-          onPrimary: Colors.red, // <-- Splash color
-        ),
-      ));
-}
-
 class LoginScene extends StatelessWidget {
   const LoginScene({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Navigator.of(context).pop(),
+    return const MaterialApp(
+      title: 'Đăng nhập',
+      home: LoginForm(),
+    );
+  }
+}
+
+// Define a custom Form widget.
+class LoginForm extends StatefulWidget {
+  const LoginForm({Key? key}) : super(key: key);
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+// Define a corresponding State class.
+// This class holds the data related to the Form.
+class _LoginFormState extends State<LoginForm> {
+  // Create a text controller and use it to retrieve the current value
+  // of the TextField.
+  final phoneNumber = TextEditingController();
+  final passWord = TextEditingController();
+
+  String _phoneNumber = '';
+  String _passWord = '';
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    phoneNumber.dispose();
+    passWord.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text("Đăng nhập"),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(children: [
+          TextField(
+            controller: phoneNumber,
+            decoration: InputDecoration(
+              labelText: 'Số điện thoại',
             ),
-            title: const Text("Đăng nhập"),
-            centerTitle: true,
           ),
-          body: Center(
-            child: Stack(children: [
-              loginForm(context),
-              bottomButton(context),
-            ]),
-          )),
+          TextField(
+              controller: passWord,
+              decoration: InputDecoration(
+                labelText: 'Mật khẩu',
+              )),
+        ]),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _passWord = passWord.text;
+          _phoneNumber = phoneNumber.text;
+        },
+        child: const Icon(Icons.arrow_forward),
+      ),
     );
   }
 }

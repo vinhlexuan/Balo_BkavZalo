@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zalo/scene/login.dart';
+import 'package:zalo/scene/register.dart';
 
 const TextStyle headingStyle = TextStyle(fontSize: 36, color: Colors.blue);
 const TextStyle bigwordStyle = TextStyle(fontSize: 22);
@@ -32,7 +34,10 @@ Widget loginSelection(BuildContext context) {
           child: ElevatedButton(
             style: style,
             onPressed: () {
-              Navigator.pushNamed(context, '/login');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginForm()),
+              );
             },
             child: const Text('Đăng nhập'),
           ),
@@ -42,7 +47,10 @@ Widget loginSelection(BuildContext context) {
           child: ElevatedButton(
             style: style2,
             onPressed: () {
-              Navigator.pushNamed(context, '/register');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RegisterForm()),
+              );
             },
             // onPressed: null,
             child: const Text(

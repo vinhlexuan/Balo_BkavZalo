@@ -1,59 +1,72 @@
 import 'package:flutter/material.dart';
 
-Widget registerForm(BuildContext context) {
-  return Container(
-    padding: const EdgeInsets.all(32),
-    child: Column(
-      children: <Widget>[
-        Container(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: const TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Tên đầy đủ',
-              ),
-            )),
-      ],
-    ),
-  );
-}
-
-Widget bottomButton(BuildContext context) {
-  return Align(
-      alignment: Alignment.bottomRight,
-      child: ElevatedButton(
-        onPressed: () {},
-        child: const Icon(Icons.arrow_forward_rounded, color: Colors.white),
-        style: ElevatedButton.styleFrom(
-          shape: const CircleBorder(),
-          padding: const EdgeInsets.all(20),
-          primary: Colors.blue, // <-- Button color
-          onPrimary: Colors.red, // <-- Splash color
-        ),
-      ));
-}
-
 class RegisterScene extends StatelessWidget {
   const RegisterScene({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Navigator.of(context).pop(),
+    return const MaterialApp(
+      title: 'Đăng ký',
+      home: RegisterForm(),
+    );
+  }
+}
+
+// Define a custom Form widget.
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
+
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
+
+// Define a corresponding State class.
+// This class holds the data related to the Form.
+class _RegisterFormState extends State<RegisterForm> {
+  // Create a text controller and use it to retrieve the current value
+  // of the TextField.
+  final fullName = TextEditingController();
+  // final passWord = TextEditingController();
+
+  String _fullName = '';
+  // String _passWord = '';
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    fullName.dispose();
+    // passWord.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text("Đăng ký"),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(children: [
+          TextField(
+            controller: fullName,
+            decoration: InputDecoration(
+              labelText: 'Tên đầy đủ',
             ),
-            title: const Text("Đăng ký"),
-            centerTitle: true,
           ),
-          body: Center(
-            child: Stack(children: [
-              registerForm(context),
-              bottomButton(context),
-            ]),
-          )),
+        ]),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _fullName = fullName.text;
+        },
+        child: const Icon(Icons.arrow_forward),
+      ),
     );
   }
 }
