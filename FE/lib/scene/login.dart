@@ -30,6 +30,7 @@ class _LoginFormState extends State<LoginForm> {
 
   String _phoneNumber = '';
   String _passWord = '';
+  bool _obscureText = false;
 
   @override
   void dispose() {
@@ -37,6 +38,12 @@ class _LoginFormState extends State<LoginForm> {
     phoneNumber.dispose();
     passWord.dispose();
     super.dispose();
+  }
+
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
   }
 
   @override
@@ -61,9 +68,18 @@ class _LoginFormState extends State<LoginForm> {
           ),
           TextField(
               controller: passWord,
+              obscureText: !_obscureText,
               decoration: InputDecoration(
-                labelText: 'Mật khẩu',
-              )),
+                  labelText: 'Mật khẩu',
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      _toggle();
+                    },
+                    child: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.red,
+                    ),
+                  )))
         ]),
       ),
       floatingActionButton: FloatingActionButton(
