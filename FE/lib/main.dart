@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zalo/scene/intro.dart';
 // import 'package:zalo/scene/login.dart';
-// import 'package:zalo/scene/mainscene.dart';
+import 'package:zalo/scene/mainscene.dart';
 // import 'package:zalo/scene/register.dart';
 
 class MyApp extends StatelessWidget {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const IntroScene(),
         // '/login': (context) => const LoginScene(),
         // '/register': (context) => const RegisterScene(),
-        // '/main': (context) => const MainScene(),
+        '/main': (context) => const MainScene(),
       },
     );
   }
