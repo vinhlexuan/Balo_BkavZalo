@@ -1,2 +1,2 @@
 # user database
-USER_DB = 'D:\\Balo_BkavZalo\\BE\\app\\constants\\serviceAccount.json'
+USER_DB = 'BE\\app\\constants\\serviceAccount.json'
