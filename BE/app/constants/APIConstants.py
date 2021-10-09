@@ -1,0 +1,5 @@
+ACCOUNT_PREFIX = '/account' 
+USER_PREFIX = '/user'
+POST_PREFIX = '/post'
+LIKE_PREFIX = '/like'
+COMMENT_PREFIX = '/comment'
