@@ -17,11 +17,11 @@ class AuthHandler():
     def verify_password(self, plain_password, hashed_password):
         return self.pwd_context.verify(plain_password,hashed_password)
 
-    def encode_token(self, username, user_id):
+    def encode_token(self, phonenumber, user_id):
         payload = {
-            'at' : datetime.utcnow(),
+    #        'at' : datetime.utcnow(),
             'exp' : datetime.utcnow() + timedelta(days = 0, hours = 10),
-            'username' : username,
+            'phonenumber' : phonenumber,
             'user_id': user_id
         }
         return jwt.encode(
