@@ -1,11 +1,14 @@
-from app.model.User import User
+from app.models.user import User
 from app.db_connect import db
 
 user_ref = db.collection(u"users")
 
-def create(user: User):
-	user_ref.document(user.phonenumber).set(user.to_dict())
-	print("create new user")
+def create(user: dict):
+	user['active'] = False
+	user['avatar'] = None
+	user['username'] = None
+	user_ref.document(user['phonenumber']).set(user)
+	print("created a new user")
 
 def find_by_phonenumber(phonenumber: str):
 	user_doc = user_ref.document(phonenumber).get()

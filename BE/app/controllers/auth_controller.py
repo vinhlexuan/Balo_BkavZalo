@@ -1,8 +1,8 @@
 from fastapi import HTTPException
-from app.model.User import User
+from app.models.user import User
 from app.repositories import user_repo
 from app.auth.auth import AuthHandler
-from app.dto.LoginRequest import LoginRequest
+from app.schemas.auth import LoginRequest, SignupRequest
 
 auth_handler = AuthHandler()
 
@@ -12,14 +12,14 @@ def ok(data = None):
 		res['data'] = data
 	return res
 
-def create_user(user: User):
-	user_doc = user_repo.find_by_phonenumber(user.phonenumber)
+def create_user(sign_info: SignupRequest):
+	user_doc = user_repo.find_by_phonenumber(sign_info.phonenumber)
 
 	if user_doc.exists:		# user existed
 		raise HTTPException(status_code=400, detail='9996')
 
-	user.password = auth_handler.get_password_hash(user.password)
-	user_repo.create(user)
+	sign_info.password = auth_handler.get_password_hash(sign_info.password)
+	user_repo.create(sign_info.dict())
 	return ok()
 
 def login(login_request: LoginRequest):

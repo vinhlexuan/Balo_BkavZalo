@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, Request, Header
-from app.model.User import User
-from app.controller import auth_controller
-from app.dto.LoginRequest import LoginRequest
+from app.models.user import User
+from app.controllers import auth_controller
+from app.schemas.auth import LoginRequest, SignupRequest
 from typing import Optional
 
 
 router = APIRouter(tags=["auth"])
 
 @router.post("/signup")
-async def signup(user: User):
-	return auth_controller.create_user(user)
+async def signup(signup_info: SignupRequest):
+	return auth_controller.create_user(signup_info)
 
 @router.post("/login")
 async def login(login_request: LoginRequest):
