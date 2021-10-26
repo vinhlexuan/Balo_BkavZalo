@@ -1,20 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RegisterScene extends StatelessWidget {
-  const RegisterScene({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Đăng ký',
-      home: RegisterForm(),
-    );
-  }
-}
-
-// Define a custom Form widget.
-class RegisterForm extends StatefulWidget {
-  const RegisterForm({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
@@ -22,7 +9,7 @@ class RegisterForm extends StatefulWidget {
 
 // Define a corresponding State class.
 // This class holds the data related to the Form.
-class _RegisterFormState extends State<RegisterForm> {
+class _RegisterFormState extends State<RegisterScreen> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
   final fullName = TextEditingController();
@@ -43,10 +30,6 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         title: const Text("Đăng ký"),
         centerTitle: true,
       ),

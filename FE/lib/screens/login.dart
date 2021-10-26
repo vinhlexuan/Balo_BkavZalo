@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:zalo/apis/auth_api.dart';
+import 'package:zalo/models/api_exception.dart';
+import 'package:zalo/models/login_info.dart';
 
-class LoginScene extends StatelessWidget {
-  const LoginScene({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Đăng nhập',
-      home: LoginForm(),
-    );
-  }
-}
-
-// Define a custom Form widget.
-class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -22,7 +12,7 @@ class LoginForm extends StatefulWidget {
 
 // Define a corresponding State class.
 // This class holds the data related to the Form.
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends State<LoginScreen> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
   final phoneNumber = TextEditingController();
@@ -31,6 +21,8 @@ class _LoginFormState extends State<LoginForm> {
   String _phoneNumber = '';
   String _passWord = '';
   bool _obscureText = false;
+
+  AuthAPI _authAPI = AuthAPI();
 
   @override
   void dispose() {
@@ -50,10 +42,6 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         title: const Text("Đăng nhập"),
         centerTitle: true,
       ),
@@ -83,9 +71,19 @@ class _LoginFormState extends State<LoginForm> {
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           _passWord = passWord.text;
           _phoneNumber = phoneNumber.text;
+
+          try {
+            LoginInfo loginInfo = await _authAPI.login(_phoneNumber, _passWord);
+            print(loginInfo.id);
+            Navigator.pushNamed(context, '/main');
+          } on APIException catch (e) {
+            print('${e.code} ${e.message}');
+          } catch (e) {
+            print(e.toString());
+          }
         },
         child: const Icon(Icons.arrow_forward),
       ),

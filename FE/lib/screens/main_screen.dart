@@ -50,17 +50,23 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
+            // onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
+            },
           ),
           title: const Text("Tìm bạn bè, tin nhắn"),
           actions: [
             IconButton(
               icon: const Icon(Icons.qr_code, color: Colors.white),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {},
             ),
             IconButton(
               icon: const Icon(Icons.add, color: Colors.white),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {},
             ),
           ],
           centerTitle: false),
@@ -76,7 +82,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: 'Danh bạ',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
+            icon: Icon(Icons.widgets),
             label: 'Khám phá',
           ),
           BottomNavigationBarItem(
@@ -97,13 +103,29 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 }
 
-class MainScene extends StatelessWidget {
-  const MainScene({Key? key}) : super(key: key);
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: MyStatefulWidget(),
+    );
+  }
+}
+
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("search screen"),
+      ),
+      body: Center(
+        child: Text("Search Screen"),
+      ),
     );
   }
 }

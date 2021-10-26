@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zalo/scene/intro.dart';
-// import 'package:zalo/scene/login.dart';
-import 'package:zalo/scene/mainscene.dart';
-// import 'package:zalo/scene/register.dart';
+import 'package:zalo/screens/intro.dart';
+import 'package:zalo/screens/login.dart';
+import 'package:zalo/screens/main_screen.dart';
+import 'package:zalo/screens/register.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -16,10 +16,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => const IntroScene(),
-        // '/login': (context) => const LoginScene(),
-        // '/register': (context) => const RegisterScene(),
-        '/main': (context) => const MainScene(),
+        '/': (context) => const IntroScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/main': (context) => const MainScreen(),
       },
     );
   }
