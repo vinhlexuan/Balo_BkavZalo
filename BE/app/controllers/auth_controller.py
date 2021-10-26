@@ -7,7 +7,7 @@ from app.schemas.auth import LoginRequest, SignupRequest
 auth_handler = AuthHandler()
 
 def ok(data = None):
-	res = {"code": "1000", "message": "OK"}
+	res = {'code': '1000', 'message': 'OK'}
 	if data is not None:
 		res['data'] = data
 	return res
@@ -24,7 +24,7 @@ def create_user(sign_info: SignupRequest):
 
 def login(login_request: LoginRequest):
 	user_doc = user_repo.find_by_phonenumber(login_request.phonenumber)
-	if user_doc is None:
+	if not user_doc.exists:
 		raise HTTPException(status_code=400, detail='9995')
 
 	user_dict = user_doc.to_dict()
