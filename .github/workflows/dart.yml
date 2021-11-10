@@ -5,13 +5,7 @@
 
 name: Test, Build and Release apk
 
-on:
-  push:
-    branches: [ main ]
-    
-  pull_request:
-    branches: [ main ]
-    
+on: [push, pull_request]   
 defaults:
   run:
     working-directory: ./FE
