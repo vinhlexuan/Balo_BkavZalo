@@ -24,9 +24,8 @@ jobs:
         
     - run: flutter pub get
 #     - run: flutter test
-    - name: Build APK artifact
-      run: flutter build apk --debug --split-per-abi
-      with:
+    - run: flutter build apk --debug --split-per-abi
+    - with:
         artifacts: "build/app/outputs/flutter-apk/*.apk"
     - name: Create a Release APK
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
