@@ -25,8 +25,12 @@ jobs:
     - run: flutter pub get
 #     - run: flutter test
     - run: flutter build apk --debug --split-per-abi
-    - with:
-        artifacts: "build/app/outputs/flutter-apk/*.apk"
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: apk-build
+        path: build/app/outputs/flutter-apk/*.apk
+        retention-days: 30
     - name: Create a Release APK
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
       uses: ncipollo/release-action@v1
