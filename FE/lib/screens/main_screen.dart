@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-// Widget searchBar(BuildContext context) {
-//   return;
-// }
+import 'package:zalo/screens/chat.dart';
+import 'package:zalo/screens/postPage.dart';
+import 'package:zalo/screens/profilePage.dart';
 
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({Key? key}) : super(key: key);
@@ -15,26 +14,23 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
+    Scaffold(
+      body: ChatPage(),
+    ),
     Text(
-      'Màn 0: Tin nhắn',
+      'Màn 1: Danh bạ - Không dùng',
       style: optionStyle,
     ),
     Text(
-      'Màn 1: Danh bạ',
+      'Màn 2: Khám phá - không dùng',
       style: optionStyle,
     ),
-    Text(
-      'Màn 2: Khám phá',
-      style: optionStyle,
+    Scaffold(
+      body: PostPage(),
     ),
-    Text(
-      'Màn 3: Nhật ký',
-      style: optionStyle,
-    ),
-    Text(
-      'Màn 4: Cá nhân',
-      style: optionStyle,
+    Scaffold(
+      body: ProfilePage(),
     ),
   ];
 
