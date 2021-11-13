@@ -3,6 +3,7 @@ import 'package:zalo/screens/intro.dart';
 import 'package:zalo/screens/login.dart';
 import 'package:zalo/screens/main_screen.dart';
 import 'package:zalo/screens/register/register.dart';
+// import 'package:zalo/screens/chat.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const IntroScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        '/main': (context) => const MainScreen(),
+        '/main': (context) => MainScreen(),
+        // '/conv': (context) => const ChatPage(),
       },
     );
   }
