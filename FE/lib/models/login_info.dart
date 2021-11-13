@@ -21,4 +21,14 @@ class LoginInfo {
       avatar: json['avatar'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": this.id,
+      "usename": this.username,
+      "token": this.token,
+      "active": this.active,
+      "avatar": this.avatar,
+    };
+  }
 }

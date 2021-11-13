@@ -31,4 +31,23 @@ class AuthAPI {
 
     return LoginInfo.fromJson(jsonData['data']);
   }
+
+  Future<void> signUp(String phoneNumber, String password, String uuid) async {
+    final uri = Uri.parse(BASE_URL + '/signup');
+    final data = {
+      'phonenumber': phoneNumber,
+      'password': password,
+      'uuid': uuid
+    };
+    Map<String, String> headers = {
+      'Content-Type': 'application/json; charset=UTF-8'
+    };
+
+    final res = await http.post(uri, headers: headers, body: jsonEncode(data));
+    final jsonData = jsonDecode(res.body);
+
+    if (res.statusCode >= 400) {
+      throw APIException.fromJson(jsonData);
+    }
+  }
 }

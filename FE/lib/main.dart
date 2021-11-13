@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zalo/screens/intro.dart';
 import 'package:zalo/screens/login.dart';
 import 'package:zalo/screens/main_screen.dart';
-import 'package:zalo/screens/register.dart';
+import 'package:zalo/screens/register/register.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
