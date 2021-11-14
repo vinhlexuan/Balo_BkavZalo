@@ -58,15 +58,16 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[100],
         body: SingleChildScrollView(
             child: Column(children: [
-      for (Post post in posts)
-        Column(
-          children: <Widget>[
-            SeparatorWidget(),
-            PostWidget(post: post),
-          ],
-        ),
-    ])));
+          for (Post post in posts)
+            Column(
+              children: <Widget>[
+                SeparatorWidget(),
+                PostWidget(post: post),
+              ],
+            ),
+        ])));
   }
 }
