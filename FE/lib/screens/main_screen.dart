@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zalo/screens/chat.dart';
+import 'package:zalo/screens/chatDetail.dart';
 import 'package:zalo/screens/postPage.dart';
 import 'package:zalo/screens/profilePage.dart';
+import 'package:zalo/screens/contact.dart';
+import 'package:zalo/widget/conversation.dart';
 
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({Key? key}) : super(key: key);
@@ -18,10 +21,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     Scaffold(
       body: ChatPage(),
     ),
-    Text(
-      'Màn 1: Danh bạ - Không dùng',
-      style: optionStyle,
-    ),
+    Scaffold(
+        body: AlphabetScrollPage(
+      onClickedItem: (item) {},
+      items: ['Duy Quang', 'Ronaldo', 'Albert Einstein', 'America', 'Scammer'],
+    )),
     Text(
       'Màn 2: Khám phá - không dùng',
       style: optionStyle,
