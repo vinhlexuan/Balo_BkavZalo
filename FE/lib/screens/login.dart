@@ -36,9 +36,9 @@ class _LoginFormState extends State<LoginScreen> {
 
   @override
   void initState() {
-    super.initState();
     if (widget.initPhoneNumber != null)
       phoneNumber.text = widget.initPhoneNumber ?? "";
+    super.initState();
   }
 
   @override
