@@ -1,15 +1,20 @@
 from fastapi import security
-import jwt
-from fastapi import HTTPException, Security
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.param_functions import Depends
+from jose import JWTError, jwt
+from fastapi import HTTPException, Security, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2PasswordBearer
 from passlib.context import CryptContext
+from app.repositories import user_repo
 from datetime import datetime, timedelta
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
+SECRET = 'SECRET'
+ALGORITHM = 'HS256'
 class AuthHandler():
     sercurity = HTTPBearer()
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    secret = 'SECRET'
+    
 
     def get_password_hash(self, password):
         return self.pwd_context.hash(password)
@@ -26,8 +31,8 @@ class AuthHandler():
         }
         return jwt.encode(
             payload= payload,
-            key=self.secret,
-            algorithm='HS256'
+            key=SECRET,
+            algorithm=ALGORITHM
         )
     def decode_token(self, token):
         try:

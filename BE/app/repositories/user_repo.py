@@ -1,4 +1,3 @@
-from app.models.user import User
 from app.db_connect import db
 
 user_ref = db.collection(u"users")
@@ -13,7 +12,6 @@ def create(user: dict):
 def find_by_phonenumber(phonenumber: str):
 	user_doc = user_ref.document(phonenumber).get()
 	return user_doc
-
 def find_all():
 	user_docs = user_ref.get()
 	result = []
