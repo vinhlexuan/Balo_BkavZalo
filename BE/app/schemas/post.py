@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 
 class PostRequest(BaseModel):
-	content : str = Field(...)
-	files : list
-	phonenumber : str = Field(...,regex="^0\d{9}$")
+	described : str = Field(...)
+	video : str 
+	image : list 
+	token : str = Field(...)

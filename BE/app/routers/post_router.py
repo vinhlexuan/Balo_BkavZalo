@@ -10,6 +10,14 @@ router = APIRouter(tags=["post"])
 async def create_post(post_info: PostRequest):
 	return post_controller.create_post(post_info)
 
-@router.post("/post/delete/{id}")
-async def delete_post():
+@router.get("/post/find_by_id")
+async def find_by_id(id : str):
+	return post_controller.find_by_id(id)
+
+@router.post("/post/update")
+async def update_post(id : str,post_info: PostRequest):
+	return post_controller.update_post(id,post_info)
+
+@router.post("/post/delete")
+async def delete_post(id : str):
 	return post_controller.delete_post(id)
