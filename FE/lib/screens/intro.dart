@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:zalo/constants/image_path.dart';
-import 'package:zalo/screens/login.dart';
-import 'package:zalo/screens/register.dart';
 
 const TextStyle headingStyle = TextStyle(fontSize: 36, color: Colors.blue);
 const TextStyle bigwordStyle = TextStyle(fontSize: 22);

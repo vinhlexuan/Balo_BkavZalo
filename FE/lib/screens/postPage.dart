@@ -1,6 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zalo/apis/post_api.dart';
+import 'package:zalo/models/post_v2.dart';
 import 'package:zalo/widget/postwidget.dart';
-import 'package:zalo/models/post.dart';
 import 'package:zalo/widget/seperateWidget.dart';
 
 class PostPage extends StatefulWidget {
@@ -9,64 +12,145 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  List<Post> posts = [
-    new Post(
-        profileImageUrl: 'images/beluwa.jpg',
-        username: 'Duy Quang',
-        time: '5h',
-        content: 'Cho bo m cai dia chi',
-        likes: '63',
-        comments: '11',
-        shares: '2'),
-    new Post(
-        profileImageUrl: 'images/beluwa.jpg',
-        username: 'A',
-        time: '13h',
-        content: 'Vai l luon dau cat moi',
-        likes: '52',
-        comments: '1',
-        shares: '6'),
-    new Post(
-        profileImageUrl: 'images/beluwa.jpg',
-        username: 'Mathew Hallberg',
-        time: '2d',
-        content:
-            'Hey guys this is Mathew, I recently created a cool AR/VR application and pushed it to github, interested people can go and see the working of the app. I hope you guys like it!',
-        likes: '61',
-        comments: '3',
-        shares: '2'),
-    new Post(
-        profileImageUrl: 'images/beluwa.jpg',
-        username: 'Eddison',
-        time: '1w',
-        content:
-            'Good afternoon people, hope you are doing well. STAY HOME STAY SAFE. Hope you are healthy and happy. Wish you good health guys :)',
-        likes: '233',
-        comments: '6',
-        shares: '4'),
-    new Post(
-        profileImageUrl: 'images/beluwa.jpg',
-        username: 'Olivia',
-        time: '3w',
-        content:
-            'I am starting a job in Los Angeles next week, this is my first ever job. Wish me luck guys',
-        likes: '77',
-        comments: '7',
-        shares: '2'),
-  ];
+  final ScrollController _scrollController = ScrollController();
+  PostApi _postApi = PostApi();
+  List<Post> posts = [];
+  bool loading = false;
+  bool allLoaded = false;
+  int index = 0, count = 5;
+  String? lastId = null;
+
+  loadData() async {
+    if (allLoaded) return;
+
+    setState(() {
+      loading = true;
+    });
+
+    String token = await getToken();
+    ListPost listPost = await _postApi.getListPost(token, lastId, index, count);
+
+    lastId = listPost.lastId;
+    List<Post> newPosts = listPost.posts;
+
+    index += newPosts.length;
+    allLoaded = newPosts.length == 0;
+    if (newPosts.length != 0) {
+      posts.addAll(newPosts);
+    }
+
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    loadData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent &&
+          !loading) {
+        loadData();
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Column(children: [
-      for (Post post in posts)
-        Column(
-          children: <Widget>[
-            SeparatorWidget(),
-            PostWidget(post: post),
-          ],
-        ),
-    ])));
+        backgroundColor: Colors.grey[100],
+        body: LayoutBuilder(builder: (context, constraints) {
+          if (posts.isNotEmpty) {
+            return ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
+                ),
+                child: ListView.separated(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    controller: _scrollController,
+                    itemBuilder: (context, index) {
+                      if (index == posts.length) {
+                        if (allLoaded) {
+                          return Align(
+                            child: Text("Không còn bài viết mới"),
+                            alignment: Alignment.center,
+                          );
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      return PostWidget(
+                        post: posts[index],
+                        callBack: callBack,
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return SeparatorWidget();
+                    },
+                    itemCount: posts.length + 1));
+          } else if (posts.isEmpty && loading) {
+            return Container(
+              child: Center(child: CircularProgressIndicator()),
+            );
+          } else {
+            return Container(
+              child: Center(
+                child: Text("Không có bài viết nào"),
+              ),
+            );
+          }
+        }));
+  }
+
+  Future<String> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? '';
+    return token;
+  }
+
+  int getPostIndex(String postId) {
+    int postIndex = 0;
+    for (int i = 0; i < posts.length; i++) {
+      if (posts[i].id == postId) {
+        postIndex = i;
+        break;
+      }
+    }
+    return postIndex;
+  }
+
+  void callBack(String type, Map<String, dynamic> param) {
+    switch (type) {
+      case 'DELETE_POST':
+        _deletePost(param['postId']);
+        break;
+      case 'HIDE_POST':
+        _hidePost(param['postId']);
+        break;
+    }
+  }
+
+  void _deletePost(String postId) {
+    index--;
+    _hidePost(postId);
+  }
+
+  void _hidePost(String postId) {
+    int postIndex = getPostIndex(postId);
+    posts.removeAt(postIndex);
+    setState(() {
+      posts = [...posts];
+    });
   }
 }
