@@ -97,6 +97,7 @@ class _LoginFormState extends State<LoginScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          print("click");
           setErrorMessage('');
           _password = password.text;
           _phoneNumber = phoneNumber.text;
@@ -109,8 +110,11 @@ class _LoginFormState extends State<LoginScreen> {
           }
 
           try {
+            print('1');
             LoginInfo loginInfo = await _authAPI.login(_phoneNumber, _password);
+            print('2');
             await saveInfo(loginInfo);
+            print('3');
             Navigator.pushNamed(context, '/main');
           } on APIException catch (e) {
             print('${e.code} ${e.message}');
@@ -135,6 +139,7 @@ class _LoginFormState extends State<LoginScreen> {
             }
             setErrorMessage('Lỗi ko xác định');
           }
+          print('end click');
         },
         child: const Icon(Icons.arrow_forward),
       ),
