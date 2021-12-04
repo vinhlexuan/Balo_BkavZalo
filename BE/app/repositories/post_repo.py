@@ -1,5 +1,5 @@
 from datetime import datetime
-from BE.app.schemas.post import PostResponse
+from app.schemas.post import PostResponse
 from app.db_connect import db
 
 post_ref = db.collection(u"posts")
