@@ -30,14 +30,10 @@ def find_by_id(id : str, token : str):
 	if post_repo.find_by_id(id) is None:
 		# raise HTTPException(status_code=400, detail='9992')
 		return ErrorResponseModel(None, 400, '9992')
-	post_dict = post_repo.find_by_id(id)
+	post_res = post_repo.find_by_id(id)
+	post_dict = post_res.dict()
 	payload = auth_handle.decode_token(token)
-	post_dict.id = id
-	post_dict.is_liked = False
-	post_dict.author = None
-	post_dict.state = None
-	post_dict.is_blocked = None
-	if post_dict.author != payload['user_id']:
+	if post_dict['user_id'] != payload['user_id']:
 		post_dict['can_edit'] = True
 	post_dict['can_comment'] = True
 	post_dict['banned'] = False

@@ -21,7 +21,7 @@ def update(id :str, post : dict):
 
 def find_by_id(id : str):
 	post_doc = post_ref.document(id).get()
-	post_reponse = PostResponse(post_doc.to_dict())
+	post_reponse = PostResponse(**post_doc.to_dict())
 	return post_reponse
 
 # def find_all_by_user_id(user_id : str):
