@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request, Header
 from typing import Optional
-from app.schemas.post import PostRequest
+from app.schemas.post import PostRequest, ListPostRequest
 from app.controllers import post_controller
 
 
@@ -21,3 +21,7 @@ async def update_post(id : str,post_info: PostRequest):
 @router.post("/post/delete")
 async def delete_post(id : str):
 	return post_controller.delete_post(id)
+
+@router.post("/post/list_post")
+async def create_post(request: ListPostRequest):
+	return post_controller.get_list_post(request)

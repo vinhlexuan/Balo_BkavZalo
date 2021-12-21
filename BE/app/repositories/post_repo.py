@@ -1,41 +1,43 @@
 from datetime import datetime
-from app.schemas.post import PostResponse
+
+from firebase_admin import firestore
 from app.db_connect import db
 
 post_ref = db.collection(u"posts")
 
 def create(post : dict):
 
-	post['created'] = datetime.now().timestamp()
-	post['modified'] = datetime.now().timestamp()
+	post['created'] = firestore.SERVER_TIMESTAMP
+	post['modified'] = firestore.SERVER_TIMESTAMP
 	print("created a new post")
 	post_doc = post_ref.document()
+	post['id'] = post_doc.id
 	post_doc.set(post)
 	return post_doc.id
 
 def update(id :str, post : dict):
 	if find_by_id(id) is None:
 		return None
-	post['modified'] = datetime.now().timestamp()
-	post_ref.document(id).set(post)
+	post['modified'] = firestore.SERVER_TIMESTAMP
+	post_ref.document(id).set(post, merge=True)
 
 def find_by_id(id : str):
 	post_doc = post_ref.document(id).get()
-	post_reponse = PostResponse(**post_doc.to_dict())
-	return post_reponse
+	return post_doc.to_dict()
 
-# def find_all_by_user_id(user_id : str):
-# 	post_docs = post_ref.get()
-# 	results = []
-# 	for post in post_docs:
-# 		if post['user_id'] == user_id:
-# 			results.append(post.to_dict())
-# 	return results
-
-def get_list_post(index : int, count : int):
-	post_docs = post_ref.stream()
-	result = post_docs[index:(index + count)]
-	return result
+def get_list_post(last_id : str, index : int, count : int):
+	if last_id == None:
+		query = post_ref.order_by(
+			u'created', direction=firestore.Query.DESCENDING).limit(int(count))
+		results = query.stream()
+		return results
+	else:
+		snapshot = post_ref.document(last_id).get()
+		query = post_ref.order_by(
+			u'created', direction=firestore.Query.DESCENDING).start_at(snapshot).limit(int(count))
+		results = query.stream()
+		print(results)
+		return results
 	
 def delete_post(post_id : str):
 	post_ref.document(post_id).delete()
