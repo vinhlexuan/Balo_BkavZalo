@@ -46,10 +46,13 @@ def update_post(id : str, post_req : PostRequest):
 
 def get_list_post(request : ListPostRequest):
 	request_dict = vars(request)
-	if post_repo.find_by_id(request_dict['last_id']) is None:
+	if ('last_id' in request_dict.keys()) and request_dict['last_id'] is not None:
+		if (post_repo.find_by_id(request_dict['last_id']) is None) and (len(request_dict['last_id']) > 0):
 		# raise HTTPException(status_code=400, detail='9992')
-		return ErrorResponseModel(None, 9992, '9992')
-	results = post_repo.get_list_post(request_dict['last_id'], None, request_dict['count'])
+			return ErrorResponseModel(None, 9992, '9992')
+		results = post_repo.get_list_post(request_dict['last_id'], None, request_dict['count'])
+	else: 
+		results = post_repo.get_list_post(None, None, request_dict['count'])
 	list_post_res = []
 	for post_result in results:
 		post_response = process_post_reponse(post_result.to_dict()['id'], request_dict['token'])
@@ -94,6 +97,8 @@ def report_post(report_post_req : ReportPost):
 def process_post_reponse(id : str, token: str):
 	post_res = post_repo.find_by_id(id)
 	payload = auth_handle.decode_token(token)
+	cur_user = user_repo.find_by_phonenumber(payload['phonenumber']).to_dict()
+	
 	post_detail_response = {}
 	post_detail_response['id'] = post_res['id'],
 	post_detail_response['describle'] = post_res['describle']
@@ -105,7 +110,7 @@ def process_post_reponse(id : str, token: str):
 	post_detail_response['image'] = str(post_res['image']) if 'image' in post_res else None
 	post_detail_response['video'] = str(post_res['video']) if 'video' in post_res else None
 	post_detail_response['author'] = post_res['author']
-	post_detail_response['can_edit'] = 'true' if post_res['author']['phonenumber'] ==  post_res['author_id'] else 'false',
-	post_detail_response['is_blocked'] = 'false' if post_res['author_id'] in post_res['author']['block_list'] else 'true'
+	post_detail_response['can_edit'] = 'true' if post_res['author']['id'] ==  cur_user['phonenumber'] else 'false',
+	post_detail_response['is_blocked'] = 'false' if payload['phonenumber'] in cur_user['block_list'] else 'true'
 	post_detail_response['can_comment'] = str(post_res['can_comment'])
 	return post_detail_response
