@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from firebase_admin import firestore
 from app.db_connect import db
 
@@ -13,7 +11,7 @@ def create(post : dict):
 	post_doc = post_ref.document()
 	post['id'] = post_doc.id
 	post_doc.set(post)
-	return post_doc.id
+	return post_doc.get().to_dict()
 
 def update(id :str, post : dict):
 	if find_by_id(id) is None:
