@@ -17,7 +17,7 @@ class _PostPageState extends State<PostPage> {
   List<Post> posts = [];
   bool loading = false;
   bool allLoaded = false;
-  int index = 0, count = 5;
+  int index = 0, count = 20;
   String? lastId = null;
 
   loadData() async {
@@ -29,7 +29,6 @@ class _PostPageState extends State<PostPage> {
 
     String token = await getToken();
     ListPost listPost = await _postApi.getListPost(token, lastId, index, count);
-
     lastId = listPost.lastId;
     List<Post> newPosts = listPost.posts;
 
