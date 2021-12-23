@@ -6,6 +6,7 @@ def create(user: dict):
 	user['active'] = False
 	user['avatar'] = None
 	user['username'] = None
+	user['block_list'] = []
 	user_ref.document(user['phonenumber']).set(user)
 	print("created a new user")
 

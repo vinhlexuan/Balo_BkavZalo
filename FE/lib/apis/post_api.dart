@@ -124,7 +124,7 @@ class PostApi {
 
   Future<ListPost> getListPost(
       String token, String? lastId, int index, int count) async {
-    final uri = Uri.parse(BASE_URL + '/get_list_posts');
+    final uri = Uri.parse(BASE_URL + '/post/list_post');
     final data = {
       'token': token,
       'last_id': lastId,
@@ -134,20 +134,20 @@ class PostApi {
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=UTF-8'
     };
-    print(data);
-    // final res = await http.post(uri, headers: headers, body: jsonEncode(data));
-    // final jsonData = jsonDecode(res.body);
-
-    await Future.delayed(Duration(seconds: 2));
-    if (index >= 20) return ListPost.fromJson(empty_list_post);
-    // if (res.statusCode >= 400) {
-    //   throw APIException.fromJson(jsonData);
-    // }
-    // return ListPost.fromJson(jsonData['data']);
-    return ListPost.fromJson(fake_list_post);
+    // print(data);
+    final res = await http.post(uri, headers: headers, body: jsonEncode(data));
+    final jsonData = jsonDecode(res.body);
+    // print(jsonData);
+    if (res.statusCode >= 400) {
+      throw APIException.fromJson(jsonData);
+    }
+    return ListPost.fromJson(jsonData);
+    // if (index >= 20) return ListPost.fromJson(empty_list_post);
+    // await Future.delayed(Duration(seconds: 2));
+    // return ListPost.fromJson(fake_list_post);
   }
 
-  Future<void> deletePost(String postId, String token) async {
+  Future<bool> deletePost(String postId, String token) async {
     final uri = Uri.parse(BASE_URL + '/get_list_posts');
     final data = {
       'token': token,
@@ -157,15 +157,20 @@ class PostApi {
       'Content-Type': 'application/json; charset=UTF-8'
     };
 
-    // final res = await http.post(uri, headers: headers, body: jsonEncode(data));
-    // final jsonData = jsonDecode(res.body);
+    final res = await http.post(uri, headers: headers, body: jsonEncode(data));
+    final jsonData = jsonDecode(res.body);
 
-    // await Future.delayed(Duration(seconds: 1));
-
-    // if (res.statusCode >= 400) {
-    //   throw APIException.fromJson(jsonData);
-    // }
-    print(data);
     await Future.delayed(Duration(seconds: 1));
+
+    if (res.statusCode >= 400) {
+      throw APIException.fromJson(jsonData);
+    }
+    return res.statusCode == 200;
+    // print(data);
+    // await Future.delayed(Duration(seconds: 1));
+  }
+
+  Future<bool> reportPost(String postId, String token) async {
+    return false;
   }
 }

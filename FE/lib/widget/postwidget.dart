@@ -102,6 +102,18 @@ class PostWidget extends StatelessWidget {
     );
   }
 
+  void handleOwnerDeletePost() async {
+    final token = await getToken();
+    bool ok =  await _postApi.deletePost(post.id, token);
+    if(ok) {
+
+    } else {
+
+    }
+  }
+
+  
+
   List<PopupMenuItem<int>> getMenu(PostRole postRole, String name) {
     if (postRole == PostRole.owner) {
       return [
@@ -113,9 +125,12 @@ class PostWidget extends StatelessWidget {
           value: 1,
           child: Text('Chỉnh sửa bài đăng'),
         ),
-        const PopupMenuItem<int>(
+        PopupMenuItem<int>(
           value: 2,
-          child: Text('Xóa hoạt động'),
+          child: TextButton(
+            child: Text('Xóa hoạt động'),
+            onPressed: handleDeletePost,
+          ),
         )
       ];
     }
