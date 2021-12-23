@@ -90,30 +90,28 @@ class IntroScreen extends StatelessWidget {
   static const String _title = 'Zalo';
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: _title,
-        home: Scaffold(
-          // appBar: AppBar(
-          //   title: const Center(
-          //       child: Text(
-          //     _title,
-          //     style: headingStyle,
-          //   )),
-          //   backgroundColor: Colors.white,
-          // ),
-          body: Center(
-            child: Column(children: [
-              Image.asset(
-                Images.INTRO,
-                width: 600,
-                height: 480,
-                fit: BoxFit.cover,
-              ),
-              // textSection(context),
-              loginSelection(context),
-              const Text("Tiếng Việt"),
-            ]),
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: const Center(
+      //       child: Text(
+      //     _title,
+      //     style: headingStyle,
+      //   )),
+      //   backgroundColor: Colors.white,
+      // ),
+      body: Center(
+        child: Column(children: [
+          Image.asset(
+            Images.INTRO,
+            width: 600,
+            height: 480,
+            fit: BoxFit.cover,
           ),
-        ));
+          // textSection(context),
+          loginSelection(context),
+          const Text("Tiếng Việt"),
+        ]),
+      ),
+    );
   }
 }
