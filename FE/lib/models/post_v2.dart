@@ -31,34 +31,68 @@ class Post {
       required this.canEdit,
       required this.banned,
       this.canComment});
+  // factory Post.fromJson(Map<String, dynamic> json) {
+  //   // DateTime created =
+  //   //     DateTime.fromMillisecondsSinceEpoch(int.parse(json['created']));
+  //   // DateTime modified =
+  //   //     DateTime.fromMillisecondsSinceEpoch(int.parse(json['modified']));
+  //   DateTime created = DateTime.parse(json['created']);
+  //   DateTime modified = DateTime.parse(json['modified']);
+  //   Author author = Author.fromJson(json['author']);
+
+  //   Post post = Post(
+  //       id: json['id'],
+  //       described: json['describle'],
+  //       created: created,
+  //       modified: modified,
+  //       like: int.parse(json['like'] ?? "0"),
+  //       comment: int.parse(json['comment'] ?? "0"),
+  //       isLiked: json['is_liked'] == '1',
+  //       author: author,
+  //       state: json['state'] ?? "",
+  //       isBlocked: json['is_blocked'] == '1',
+  //       canEdit: json['can_edit'] == '1',
+  //       canComment: true,
+  //       banned: json['banned'] == '1');
+
+  //   if (json['image'] != null) {
+  //     List<MyImage> images = [];
+  //     json['image']
+  //         .forEach((imageMap) => images.add(MyImage.fromJson(imageMap)));
+  //     post.images = images;
+  //   } else if (json['video'] != null) {
+  //     post.video = Video.fromJson(json['video']);
+  //   }
+
+  //   return post;
+  // }
   factory Post.fromJson(Map<String, dynamic> json) {
-    DateTime created =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(json['created']));
-    DateTime modified =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(json['modified']));
+    DateTime created = DateTime.parse(json['created']);
+    DateTime modified = DateTime.parse(json['modified']);
     Author author = Author.fromJson(json['author']);
     Post post = Post(
-        id: json['id'],
-        described: json['described'],
+        id: json['id'][0],
+        described: json['describle'],
         created: created,
         modified: modified,
-        like: int.parse(json['like']),
-        comment: int.parse(json['comment']),
-        isLiked: json['is_liked'] == '1',
+        like: json['like'] ?? 0,
+        comment: json['comment'] ?? 0,
+        isLiked: json['is_liked'] == 'true',
         author: author,
-        state: json['state'],
-        isBlocked: json['is_blocked'] == '1',
-        canEdit: json['can_edit'] == '1',
+        state: json['state'] ?? "",
+        isBlocked: json['is_blocked'] == 'true',
+        canEdit: json['can_edit'][0] == 'true',
+        canComment: json['can_comment'] == 'True',
         banned: json['banned'] == '1');
 
-    if (json['image'] != null) {
-      List<MyImage> images = [];
-      json['image']
-          .forEach((imageMap) => images.add(MyImage.fromJson(imageMap)));
-      post.images = images;
-    } else if (json['video'] != null) {
-      post.video = Video.fromJson(json['video']);
-    }
+    // if (json['image'] != null) {
+    //   List<MyImage> images = [];
+    //   json['image']
+    //       .forEach((imageMap) => images.add(MyImage.fromJson(imageMap)));
+    //   post.images = images;
+    // } else if (json['video'] != null) {
+    //   post.video = Video.fromJson(json['video']);
+    // }
 
     return post;
   }
@@ -113,12 +147,18 @@ class ListPost {
 
   ListPost({required this.posts, required this.newItems, required this.lastId});
 
-  factory ListPost.fromJson(Map<String, dynamic> json) {
+  // factory ListPost.fromJson(Map<String, dynamic> json) {
+  //   List<Post> posts = [];
+  //   json['posts'].forEach((postMap) => posts.add(Post.fromJson(postMap)));
+  //   return ListPost(
+  //       posts: posts,
+  //       newItems: int.parse(json['new_items']),
+  //       lastId: json['last_id']);
+  // }
+  factory ListPost.fromJson(List<dynamic> data) {
     List<Post> posts = [];
-    json['posts'].forEach((postMap) => posts.add(Post.fromJson(postMap)));
+    data.forEach((postMap) => posts.add(Post.fromJson(postMap)));
     return ListPost(
-        posts: posts,
-        newItems: int.parse(json['new_items']),
-        lastId: json['last_id']);
+        posts: posts, newItems: 0, lastId: posts[posts.length - 1].id);
   }
 }
