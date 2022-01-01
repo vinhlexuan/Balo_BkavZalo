@@ -18,9 +18,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    Scaffold(
-      body: ChatPage(),
-    ),
+    ChatPage(),
     Scaffold(
         body: AlphabetScrollPage(
       onClickedItem: (item) {},
@@ -30,12 +28,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       'Màn 2: Khám phá - không dùng',
       style: optionStyle,
     ),
-    Scaffold(
-      body: PostPage(),
-    ),
-    Scaffold(
-      body: ProfilePage(),
-    ),
+    PostPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -108,9 +102,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyStatefulWidget(),
-    );
+    return MyStatefulWidget();
   }
 }
 

@@ -84,18 +84,19 @@ class _ProfilePageState extends State<ProfilePage> {
             title: Text("Đăng xuất"),
             onTap: () async {
               await deleteInfo();
-              Navigator.push<void>(
-                context,
-                MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const IntroScreen()),
-              );
+              // Navigator.push<void>(
+              //   context,
+              //   MaterialPageRoute<void>(
+              //       builder: (BuildContext context) => const IntroScreen()),
+              // );
 
               // Navigator.pushReplacementNamed(context, "/");
 
               // Navigator.pushNamed(context, "/login");
+              // Navigator.pushNamed(context, "/");
 
-              // Navigator.pushNamedAndRemoveUntil(
-              //     context, "/", ModalRoute.withName('/'));
+              Navigator.pushNamedAndRemoveUntil(
+                  context, "/", ModalRoute.withName('/'));
             },
           ),
         ],
