@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
-// Widget searchBar(BuildContext context) {
-//   return;
-// }
-
+import 'package:zalo/screens/chat.dart';
+import 'package:zalo/screens/postPage.dart';
+import 'package:zalo/screens/profilePage.dart';
+import 'package:zalo/screens/contact.dart';
+import 'package:zalo/screens/friend_recommend.dart';
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({Key? key}) : super(key: key);
 
@@ -15,27 +15,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Màn 0: Tin nhắn',
-      style: optionStyle,
+  static List<Widget> _widgetOptions = <Widget>[
+    ChatPage(),
+    Scaffold(
+        body: AlphabetScrollPage(
+      onClickedItem: (item) {
+      },
+      items: ['Duy Quang', 'Ronaldo', 'Albert Einstein', 'America', 'Scammer'],
+    )),
+    Scaffold(
+      body: FriendsListPage(),
     ),
-    Text(
-      'Màn 1: Danh bạ',
-      style: optionStyle,
-    ),
-    Text(
-      'Màn 2: Khám phá',
-      style: optionStyle,
-    ),
-    Text(
-      'Màn 3: Nhật ký',
-      style: optionStyle,
-    ),
-    Text(
-      'Màn 4: Cá nhân',
-      style: optionStyle,
-    ),
+    PostPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -50,17 +42,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
+            },
           ),
           title: const Text("Tìm bạn bè, tin nhắn"),
           actions: [
             IconButton(
               icon: const Icon(Icons.qr_code, color: Colors.white),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {},
             ),
             IconButton(
               icon: const Icon(Icons.add, color: Colors.white),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {},
             ),
           ],
           centerTitle: false),
@@ -76,7 +73,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: 'Danh bạ',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
+            icon: Icon(Icons.widgets),
             label: 'Khám phá',
           ),
           BottomNavigationBarItem(
@@ -97,13 +94,27 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 }
 
-class MainScene extends StatelessWidget {
-  const MainScene({Key? key}) : super(key: key);
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyStatefulWidget(),
+    return MyStatefulWidget();
+  }
+}
+
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("search screen"),
+      ),
+      body: Center(
+        child: Text("Search Screen"),
+      ),
     );
   }
 }

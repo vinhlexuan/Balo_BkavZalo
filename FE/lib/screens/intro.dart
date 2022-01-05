@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zalo/scene/login.dart';
-import 'package:zalo/scene/register.dart';
+import 'package:zalo/constants/image_path.dart';
 
 const TextStyle headingStyle = TextStyle(fontSize: 36, color: Colors.blue);
 const TextStyle bigwordStyle = TextStyle(fontSize: 22);
@@ -34,10 +33,7 @@ Widget loginSelection(BuildContext context) {
           child: ElevatedButton(
             style: style,
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginForm()),
-              );
+              Navigator.pushNamed(context, "/login");
             },
             child: const Text('Đăng nhập'),
           ),
@@ -47,10 +43,11 @@ Widget loginSelection(BuildContext context) {
           child: ElevatedButton(
             style: style2,
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RegisterForm()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const RegisterForm()),
+              // );
+              Navigator.pushNamed(context, "/register");
             },
             // onPressed: null,
             child: const Text(
@@ -88,35 +85,33 @@ Widget textSection(BuildContext context) {
   );
 }
 
-class IntroScene extends StatelessWidget {
-  const IntroScene({Key? key}) : super(key: key);
+class IntroScreen extends StatelessWidget {
+  const IntroScreen({Key? key}) : super(key: key);
   static const String _title = 'Zalo';
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: _title,
-        home: Scaffold(
-          // appBar: AppBar(
-          //   title: const Center(
-          //       child: Text(
-          //     _title,
-          //     style: headingStyle,
-          //   )),
-          //   backgroundColor: Colors.white,
-          // ),
-          body: Center(
-            child: Column(children: [
-              Image.asset(
-                'images/zalo02.jpg',
-                width: 600,
-                height: 480,
-                fit: BoxFit.cover,
-              ),
-              // textSection(context),
-              loginSelection(context),
-              const Text("Tiếng Việt"),
-            ]),
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: const Center(
+      //       child: Text(
+      //     _title,
+      //     style: headingStyle,
+      //   )),
+      //   backgroundColor: Colors.white,
+      // ),
+      body: Center(
+        child: Column(children: [
+          Image.asset(
+            Images.INTRO,
+            width: 600,
+            height: 480,
+            fit: BoxFit.cover,
           ),
-        ));
+          // textSection(context),
+          loginSelection(context),
+          const Text("Tiếng Việt"),
+        ]),
+      ),
+    );
   }
 }

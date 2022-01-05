@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:zalo/scene/intro.dart';
-import 'package:zalo/scene/login.dart';
-import 'package:zalo/scene/mainscene.dart';
-import 'package:zalo/scene/register.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zalo/screens/intro.dart';
+import 'package:zalo/screens/login.dart';
+import 'package:zalo/screens/main_screen.dart';
+import 'package:zalo/screens/register/register.dart';
+import 'package:zalo/utils/auth_helper.dart';
+// import 'package:zalo/screens/chat.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final String initScreen;
+  const MyApp({Key? key, this.initScreen = '/'}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,19 +17,42 @@ class MyApp extends StatelessWidget {
       title: 'Named Routes Demo',
       // Start the app with the "/" named route. In this case, the app starts
       // on the FirstScreen widget.
-      initialRoute: '/',
+      initialRoute: initScreen,
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => const IntroScene(),
-        '/login': (context) => const LoginScene(),
-        '/register': (context) => const RegisterScene(),
-        '/main': (context) => const MainScene(),
+        '/': (context) => const IntroScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/main': (context) => MainScreen(),
+        // '/conv': (context) => const ChatPage(),
       },
     );
   }
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  String initScreen = await getInitScreen();
+
+  runApp(MyApp(initScreen: initScreen));
+}
+
+Future<String> getInitScreen() async {
+  String initScreen = '/';
+
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? token = prefs.getString('token');
+    if (token != null) {
+      var payloadMap = AuthHelper().parseJwt(token);
+      var expiredTime = payloadMap['exp'];
+      var now = DateTime.now().millisecondsSinceEpoch / 1000;
+      if (expiredTime > now) initScreen = "/main";
+    }
+  } catch (err) {
+    print(err);
+  }
+
+  return initScreen;
 }
