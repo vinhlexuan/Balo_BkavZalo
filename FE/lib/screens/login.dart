@@ -110,11 +110,8 @@ class _LoginFormState extends State<LoginScreen> {
           }
 
           try {
-            print('1');
             LoginInfo loginInfo = await _authAPI.login(_phoneNumber, _password);
-            print('2');
             await saveInfo(loginInfo);
-            print('3');
             Navigator.pushNamed(context, '/main');
           } on APIException catch (e) {
             print('${e.code} ${e.message}');

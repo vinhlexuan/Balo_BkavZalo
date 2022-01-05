@@ -31,14 +31,14 @@ def create_post(post_req : PostRequest):
 def find_by_id(id : str, token : str):
 	if post_repo.find_by_id(id) is None:
 		# raise HTTPException(status_code=400, detail='9992')
-		return ErrorResponseModel(None, 9992, '9992')
+		return ErrorResponseModel(None, 9992, message='9992')
 	post_dict = process_post_reponse(id, token)
 	return ResponseModel(code=1000, message='Success', data=post_dict)
 
 def update_post(id : str, post_req : PostRequest):
 	if post_repo.find_by_id(id) is None:
 		# raise HTTPException(status_code=400, detail='9992')
-		return ErrorResponseModel(None, 9992, '9992')
+		return ErrorResponseModel(None, 9992, message='9992')
 	post_dict = vars(post_req)
 	post_dict.pop('token', None)
 	post_repo.update(id, post_dict)
@@ -49,7 +49,7 @@ def get_list_post(request : ListPostRequest):
 	if ('last_id' in request_dict.keys()) and request_dict['last_id'] is not None:
 		if (post_repo.find_by_id(request_dict['last_id']) is None) and (len(request_dict['last_id']) > 0):
 		# raise HTTPException(status_code=400, detail='9992')
-			return ErrorResponseModel(None, 9992, '9992')
+			return ErrorResponseModel(None, 9992, message='9992')
 		results = post_repo.get_list_post(request_dict['last_id'], None, request_dict['count'])
 	else: 
 		results = post_repo.get_list_post(None, None, request_dict['count'])
@@ -58,16 +58,20 @@ def get_list_post(request : ListPostRequest):
 		post_response = process_post_reponse(post_result.to_dict()['id'], request_dict['token'])
 		list_post_res.append(post_response)
 	print(list_post_res)
-	return list_post_res
+	return ResponseModel(code=1000, message='Success', data=list_post_res)
 
 def delete_post(post_id : str):
-	post_repo.delete_post(post_id)
-	return ok()
+	try:
+		post_repo.delete_post(post_id)
+		comment_repo.delete_by_post_id(post_id)
+		return ok()
+	except:
+		return ErrorResponseModel(None,9999,message='9999')
 
 def report_post(report_post_req : ReportPost):
 	if post_repo.find_by_id(id) is None:
 		# raise HTTPException(status_code=400, detail='9992')
-		return ErrorResponseModel(None, 9992, '9992')
+		return ErrorResponseModel(None, 9992, message='9992')
 	reported_post_repo.save(report_post_req.dict())
 	return ResponseModel(code=1000, message='Success', data=None)
 
