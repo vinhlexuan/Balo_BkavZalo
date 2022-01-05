@@ -76,10 +76,10 @@ class _ProfilePageState extends State<ProfilePage> {
               radius: 20.0,
             ),
           ),
-          ListTile(title: Text("Ví QR"), onTap: () {}),
-          ListTile(title: Text("Cloud của tôi"), onTap: () {}),
+          // ListTile(title: Text("Ví QR"), onTap: () {}),
+          // ListTile(title: Text("Cloud của tôi"), onTap: () {}),
           ListTile(title: Text("Tài khoản và bảo mật"), onTap: () {}),
-          ListTile(title: Text("Quyền riêng tư"), onTap: () {}),
+          // ListTile(title: Text("Quyền riêng tư"), onTap: () {}),
           ListTile(
             title: Text("Đăng xuất"),
             onTap: () async {
