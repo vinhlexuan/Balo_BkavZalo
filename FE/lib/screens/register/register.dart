@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:zalo/apis/auth_api.dart';
@@ -52,6 +51,7 @@ class _RegisterFormState extends State<RegisterScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(children: [
+          
           TextField(
             controller: phoneNumberController,
             decoration: InputDecoration(
@@ -79,6 +79,7 @@ class _RegisterFormState extends State<RegisterScreen> {
               decoration: InputDecoration(
                 labelText: 'Nhập lại mật khẩu',
               )),
+          
           Padding(
             padding: EdgeInsets.only(top: 16.0),
             child: Text(

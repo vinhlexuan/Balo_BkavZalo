@@ -68,14 +68,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   ),
                 ),
                 Icon(
-                  Icons.phone_rounded,
-                  color: Colors.white,
-                ),
-                Icon(
-                  Icons.video_call,
-                  color: Colors.white,
-                ),
-                Icon(
                   Icons.settings,
                   color: Colors.white,
                 ),
