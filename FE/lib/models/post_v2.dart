@@ -1,6 +1,6 @@
 class Post {
   String id;
-  String described;
+  String describle;
   DateTime created;
   DateTime modified;
   int like;
@@ -17,7 +17,7 @@ class Post {
 
   Post(
       {required this.id,
-      required this.described,
+      required this.describle,
       required this.created,
       required this.modified,
       required this.like,
@@ -72,7 +72,7 @@ class Post {
     Author author = Author.fromJson(json['author']);
     Post post = Post(
         id: json['id'][0],
-        described: json['describle'],
+        describle: json['describle'],
         created: created,
         modified: modified,
         like: json['like'] ?? 0,
@@ -134,7 +134,7 @@ class Author {
   factory Author.fromJson(Map<String, dynamic> json) {
     return Author(
       id: json['id'],
-      name: json['name'],
+      name: json['name'] ?? 'Anonymous',
       avatar: json['avatar'],
     );
   }

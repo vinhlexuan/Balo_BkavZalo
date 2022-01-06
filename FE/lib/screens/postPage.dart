@@ -17,7 +17,7 @@ class _PostPageState extends State<PostPage> {
   List<Post> posts = [];
   bool loading = false;
   bool allLoaded = false;
-  int index = 0, count = 20;
+  int index = 0, count = 1;
   String? lastId = null;
 
   loadData() async {
@@ -32,11 +32,11 @@ class _PostPageState extends State<PostPage> {
     lastId = listPost.lastId;
     List<Post> newPosts = listPost.posts;
 
-    index += newPosts.length;
-    allLoaded = newPosts.length == 0;
+    allLoaded = newPosts.length < count;
     if (newPosts.length != 0) {
       posts.addAll(newPosts);
     }
+    index += posts.length;
 
     setState(() {
       loading = false;

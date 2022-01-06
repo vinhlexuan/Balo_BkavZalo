@@ -48,7 +48,7 @@ class PostWidget extends StatelessWidget {
             ],
           ),
           SizedBox(height: 20.0),
-          Text(post.described, style: TextStyle(fontSize: 15.0)),
+          Text(post.describle, style: TextStyle(fontSize: 15.0)),
           SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,15 +104,10 @@ class PostWidget extends StatelessWidget {
 
   void handleOwnerDeletePost() async {
     final token = await getToken();
-    bool ok =  await _postApi.deletePost(post.id, token);
-    if(ok) {
-
-    } else {
-
-    }
+    bool ok = await _postApi.deletePost(post.id, token);
+    if (ok) {
+    } else {}
   }
-
-  
 
   List<PopupMenuItem<int>> getMenu(PostRole postRole, String name) {
     if (postRole == PostRole.owner) {

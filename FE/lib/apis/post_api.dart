@@ -134,14 +134,15 @@ class PostApi {
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=UTF-8'
     };
-    // print(data);
+    print('getListPost');
+    print(data);
     final res = await http.post(uri, headers: headers, body: jsonEncode(data));
     final jsonData = jsonDecode(res.body);
-    // print(jsonData);
+    // print(jsonData['data']);
     if (res.statusCode >= 400) {
       throw APIException.fromJson(jsonData);
     }
-    return ListPost.fromJson(jsonData);
+    return ListPost.fromJson(jsonData['data']);
     // if (index >= 20) return ListPost.fromJson(empty_list_post);
     // await Future.delayed(Duration(seconds: 2));
     // return ListPost.fromJson(fake_list_post);
