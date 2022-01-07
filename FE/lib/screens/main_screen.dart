@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zalo/screens/chat.dart';
-import 'package:zalo/screens/postPage.dart';
+import 'package:zalo/screens/post/postPage.dart';
 import 'package:zalo/screens/profilePage.dart';
 import 'package:zalo/screens/contact.dart';
 import 'package:zalo/screens/friend_recommend.dart';
+
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({Key? key}) : super(key: key);
 
@@ -19,8 +20,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     ChatPage(),
     Scaffold(
         body: AlphabetScrollPage(
-      onClickedItem: (item) {
-      },
+      onClickedItem: (item) {},
       items: ['Duy Quang', 'Ronaldo', 'Albert Einstein', 'America', 'Scammer'],
     )),
     Scaffold(

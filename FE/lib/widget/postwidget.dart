@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zalo/apis/post_api.dart';
 import 'package:zalo/models/post_v2.dart';
 
@@ -9,10 +8,14 @@ enum PostRole { owner, viewer }
 class PostWidget extends StatelessWidget {
   final Post post;
   final void Function(String type, Map<String, dynamic>) callBack;
+  final BuildContext parentContext;
 
   final PostApi _postApi = PostApi();
 
-  PostWidget({required this.post, required this.callBack});
+  PostWidget(
+      {required this.post,
+      required this.callBack,
+      required this.parentContext});
 
   @override
   Widget build(BuildContext context) {
@@ -102,14 +105,8 @@ class PostWidget extends StatelessWidget {
     );
   }
 
-  void handleOwnerDeletePost() async {
-    final token = await getToken();
-    bool ok = await _postApi.deletePost(post.id, token);
-    if (ok) {
-    } else {}
-  }
-
-  List<PopupMenuItem<int>> getMenu(PostRole postRole, String name) {
+  List<PopupMenuItem<int>> getMenu(
+      BuildContext context, PostRole postRole, String name) {
     if (postRole == PostRole.owner) {
       return [
         const PopupMenuItem<int>(
@@ -122,18 +119,15 @@ class PostWidget extends StatelessWidget {
         ),
         PopupMenuItem<int>(
           value: 2,
-          child: TextButton(
-            child: Text('Xóa hoạt động'),
-            onPressed: handleDeletePost,
-          ),
+          child: Text('Xóa bài đăng'),
         )
       ];
     }
     return [
-      const PopupMenuItem<int>(
-        value: 3,
-        child: Text('Xoá hoạt động này'),
-      ),
+      // const PopupMenuItem<int>(
+      //   value: 3,
+      //   child: Text('Xoá hoạt động này'),
+      // ),
       PopupMenuItem<int>(
         value: 4,
         child: Text('Ẩn nhật ký của $name'),
@@ -153,13 +147,13 @@ class PostWidget extends StatelessWidget {
       case 1: // chỉnh sửa bài đăng
         print('edit post');
         break;
-      case 2: // xóa hoạt động
+      case 2: // xóa bài viết
         print('delete post');
-        handleDeletePost();
+        handleOwnerDeletePost();
         break;
-      case 3: // xóa hoạt động này
-        print('delete post');
-        break;
+      // case 3: // ??
+      //   print('delete post');
+      //   break;
       case 4: // ẩn nhật ký
         print('hide post');
         handleHidePost();
@@ -170,16 +164,48 @@ class PostWidget extends StatelessWidget {
     }
   }
 
-  Future<String> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token') ?? '';
-    return token;
+  void handleOwnerDeletePost() async {
+    showDialog(
+        context: parentContext,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            title: new Text("Xác nhận"),
+            content: new Text("Bạn muỗn xóa bài đăng"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    handleDeletePost();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Đồng ý")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Hủy"))
+            ],
+          );
+        });
   }
 
   void handleDeletePost() async {
-    String token = await getToken();
-    await _postApi.deletePost(post.id, token);
+    await _postApi.deletePost(post.id);
     callBack('DELETE_POST', {'postId': post.id});
+    showDialog(
+        context: parentContext,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            title: new Text("Thành công"),
+            content: new Text("Đã xóa bài đăng"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK"))
+            ],
+          );
+        });
   }
 
   void handleHidePost() {
@@ -190,7 +216,7 @@ class PostWidget extends StatelessWidget {
     return PopupMenuButton<int>(
       onSelected: handleItemClick,
       itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-        ...getMenu(postRole, post.author.name ?? 'Anonymous')
+        ...getMenu(context, postRole, post.author.name ?? 'Anonymous')
       ],
       icon: const Icon(Icons.more_horiz),
       tooltip: "More actions",

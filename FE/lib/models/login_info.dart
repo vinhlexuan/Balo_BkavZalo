@@ -15,7 +15,7 @@ class LoginInfo {
   factory LoginInfo.fromJson(Map<String, dynamic> json) {
     return LoginInfo(
       id: json['id'],
-      username: json['username'],
+      username: json['username'] ?? "Anonymous",
       token: json['token'],
       active: json['active'],
       avatar: json['avatar'],

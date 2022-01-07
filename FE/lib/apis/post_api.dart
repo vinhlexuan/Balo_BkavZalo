@@ -1,117 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:zalo/apis/base_api.dart';
 import 'package:zalo/constants/api_path.dart';
 import 'package:zalo/models/api_exception.dart';
 import 'package:zalo/models/post_v2.dart';
-
-var fake_list_post = {
-  'posts': [
-    {
-      'id': 'XXX123',
-      'described': 'Bài viết một',
-      'created': '1638176663325',
-      'modified': '1638176663325',
-      'like': '60',
-      'comment': '10',
-      'is_liked': '1',
-      'author': {
-        'id': 'AAA001',
-        'name': 'Nguyễn Văn A',
-        'avatar': 'https://picsum.photos/200'
-      },
-      'state': 'good',
-      'is_blocked': '0',
-      'can_edit': '1',
-      'banned': '0',
-      'can_comment': '1',
-    },
-    {
-      'id': 'XXX124',
-      'described': 'Bài viết hai',
-      'created': '1638176663325',
-      'modified': '1638176663325',
-      'like': '70',
-      'comment': '0',
-      'is_liked': '0',
-      'author': {
-        'id': 'AAA002',
-        'name': 'Nguyễn Văn B',
-        'avatar': 'https://picsum.photos/200'
-      },
-      'state': 'good',
-      'is_blocked': '0',
-      'can_edit': '0',
-      'banned': '0',
-      'can_comment': '1',
-    },
-    {
-      'id': 'XXX125',
-      'described': 'Bài viết Ba',
-      'created': '1638176663325',
-      'modified': '1638176663325',
-      'like': '40',
-      'comment': '0',
-      'is_liked': '1',
-      'author': {
-        'id': 'AAA003',
-        'name': 'Nguyễn Văn C',
-        'avatar': 'https://picsum.photos/200'
-      },
-      'state': 'good',
-      'is_blocked': '0',
-      'can_edit': '0',
-      'banned': '0',
-      'can_comment': '1',
-    },
-    {
-      'id': 'XXX126',
-      'described': 'Bài viết Bốn',
-      'created': '1638176663325',
-      'modified': '1638176663325',
-      'like': '100',
-      'comment': '0',
-      'is_liked': '1',
-      'author': {
-        'id': 'AAA004',
-        'name': 'Nguyễn Văn D',
-        'avatar': 'https://picsum.photos/200'
-      },
-      'state': 'good',
-      'is_blocked': '0',
-      'can_edit': '0',
-      'banned': '0',
-      'can_comment': '1',
-    },
-    {
-      'id': 'XXX127',
-      'described': 'Bài viết năm',
-      'created': '1638176663325',
-      'modified': '1638176663325',
-      'like': '100',
-      'comment': '0',
-      'is_liked': '1',
-      'author': {
-        'id': 'AAA001',
-        'name': 'Nguyễn Văn E',
-        'avatar': 'https://picsum.photos/200'
-      },
-      'state': 'good',
-      'is_blocked': '0',
-      'can_edit': '0',
-      'banned': '0',
-      'can_comment': '1',
-    },
-  ],
-  'new_items': '5',
-  'last_id': 'XXXYYY',
-};
-
-var empty_list_post = {
-  'posts': [],
-  'new_items': '5',
-  'last_id': 'XXXYYY',
-};
 
 class PostApi {
   PostApi._privateConstructor();
@@ -121,6 +14,8 @@ class PostApi {
   factory PostApi() {
     return _instance;
   }
+
+  BaseApi _api = BaseApi();
 
   Future<ListPost> getListPost(
       String token, String? lastId, int index, int count) async {
@@ -148,30 +43,33 @@ class PostApi {
     // return ListPost.fromJson(fake_list_post);
   }
 
-  Future<bool> deletePost(String postId, String token) async {
-    final uri = Uri.parse(BASE_URL + '/get_list_posts');
-    final data = {
-      'token': token,
-      'post_id': postId,
-    };
-    Map<String, String> headers = {
-      'Content-Type': 'application/json; charset=UTF-8'
-    };
-
-    final res = await http.post(uri, headers: headers, body: jsonEncode(data));
+  Future<bool> deletePost(String postId) async {
+    print('deletePost');
+    final res =
+        await _api.request({'post_id': postId}, '/post/delete?id=$postId');
     final jsonData = jsonDecode(res.body);
-
-    await Future.delayed(Duration(seconds: 1));
 
     if (res.statusCode >= 400) {
       throw APIException.fromJson(jsonData);
     }
-    return res.statusCode == 200;
-    // print(data);
-    // await Future.delayed(Duration(seconds: 1));
+    return jsonData['code'] == 1000;
   }
 
   Future<bool> reportPost(String postId, String token) async {
+    return false;
+  }
+
+  Future<bool> createPost(String describle) async {
+    print("createPost");
+    final res = await _api.request({'describle': describle}, '/post/create');
+
+    final jsonData = jsonDecode(res.body);
+
+    if (res.statusCode >= 400) {
+      throw APIException.fromJson(jsonData);
+    }
+    if (jsonData['code'] == 1000) return true;
+
     return false;
   }
 }

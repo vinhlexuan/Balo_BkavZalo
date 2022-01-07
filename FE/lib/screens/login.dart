@@ -7,6 +7,7 @@ import 'package:zalo/models/api_exception.dart';
 import 'package:zalo/models/login_info.dart';
 import 'package:zalo/screens/no_internet.dart';
 import 'package:zalo/utils/auth_helper.dart';
+import 'package:zalo/utils/storeService.dart';
 import '../constants/error.dart';
 import '../utils/check_connection.dart';
 
@@ -23,6 +24,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginFormState extends State<LoginScreen> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
+
   final phoneNumber = TextEditingController();
   final password = TextEditingController();
 
@@ -33,6 +35,7 @@ class _LoginFormState extends State<LoginScreen> {
 
   AuthAPI _authAPI = AuthAPI();
   AuthHelper _authHelper = AuthHelper();
+  StoreService _storeService = StoreService();
 
   @override
   void initState() {
@@ -97,7 +100,6 @@ class _LoginFormState extends State<LoginScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          print("click");
           setErrorMessage('');
           _password = password.text;
           _phoneNumber = phoneNumber.text;
@@ -136,7 +138,6 @@ class _LoginFormState extends State<LoginScreen> {
             }
             setErrorMessage('Lỗi ko xác định');
           }
-          print('end click');
         },
         child: const Icon(Icons.arrow_forward),
       ),
@@ -144,9 +145,8 @@ class _LoginFormState extends State<LoginScreen> {
   }
 
   Future<void> saveInfo(LoginInfo loginInfo) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("token", loginInfo.token);
-    prefs.setString("user_info", json.encode(loginInfo.toJson()));
+    await _storeService.saveToken(loginInfo.token);
+    await _storeService.saveLoginInfo(loginInfo);
   }
 
   void setErrorMessage(String message) {
