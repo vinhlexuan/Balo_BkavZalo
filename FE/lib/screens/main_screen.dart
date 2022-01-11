@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:zalo/screens/chat.dart';
-import 'package:zalo/screens/chatDetail.dart';
 import 'package:zalo/screens/postPage.dart';
 import 'package:zalo/screens/profilePage.dart';
 import 'package:zalo/screens/contact.dart';
-import 'package:zalo/widget/conversation.dart';
-
+import 'package:zalo/screens/friend_recommend.dart';
 class MyStatefulWidget extends StatefulWidget {
   const MyStatefulWidget({Key? key}) : super(key: key);
 
@@ -18,24 +16,18 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    Scaffold(
-      body: ChatPage(),
-    ),
+    ChatPage(),
     Scaffold(
         body: AlphabetScrollPage(
-      onClickedItem: (item) {},
+      onClickedItem: (item) {
+      },
       items: ['Duy Quang', 'Ronaldo', 'Albert Einstein', 'America', 'Scammer'],
     )),
-    Text(
-      'Màn 2: Khám phá - không dùng',
-      style: optionStyle,
-    ),
     Scaffold(
-      body: PostPage(),
+      body: FriendsListPage(),
     ),
-    Scaffold(
-      body: ProfilePage(),
-    ),
+    PostPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -50,7 +42,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
-            // onPressed: () => Navigator.of(context).pop(),
             onPressed: () {
               Navigator.push(
                 context,
@@ -108,9 +99,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyStatefulWidget(),
-    );
+    return MyStatefulWidget();
   }
 }
 

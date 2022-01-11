@@ -2,6 +2,7 @@ import 'package:azlistview/azlistview.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:zalo/screens/chatDetail.dart';
 
 class _AZItem extends ISuspensionBean {
   final String title;
@@ -88,7 +89,7 @@ class _AlphabetScrollPageState extends State<AlphabetScrollPage> {
           margin: EdgeInsets.only(right: 16),
           child: ListTile(
             title: Text(item.title),
-            onTap: () => widget.onClickedItem(item.title),
+            onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatDetailPage())),
           ),
         )
       ],

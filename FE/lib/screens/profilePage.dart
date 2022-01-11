@@ -76,26 +76,27 @@ class _ProfilePageState extends State<ProfilePage> {
               radius: 20.0,
             ),
           ),
-          ListTile(title: Text("Ví QR"), onTap: () {}),
-          ListTile(title: Text("Cloud của tôi"), onTap: () {}),
+          // ListTile(title: Text("Ví QR"), onTap: () {}),
+          // ListTile(title: Text("Cloud của tôi"), onTap: () {}),
           ListTile(title: Text("Tài khoản và bảo mật"), onTap: () {}),
-          ListTile(title: Text("Quyền riêng tư"), onTap: () {}),
+          // ListTile(title: Text("Quyền riêng tư"), onTap: () {}),
           ListTile(
             title: Text("Đăng xuất"),
             onTap: () async {
               await deleteInfo();
-              Navigator.push<void>(
-                context,
-                MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const IntroScreen()),
-              );
+              // Navigator.push<void>(
+              //   context,
+              //   MaterialPageRoute<void>(
+              //       builder: (BuildContext context) => const IntroScreen()),
+              // );
 
               // Navigator.pushReplacementNamed(context, "/");
 
               // Navigator.pushNamed(context, "/login");
+              // Navigator.pushNamed(context, "/");
 
-              // Navigator.pushNamedAndRemoveUntil(
-              //     context, "/", ModalRoute.withName('/'));
+              Navigator.pushNamedAndRemoveUntil(
+                  context, "/", ModalRoute.withName('/'));
             },
           ),
         ],
