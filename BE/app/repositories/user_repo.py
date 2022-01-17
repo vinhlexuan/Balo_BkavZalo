@@ -6,7 +6,7 @@ user_ref = db.collection(u"users")
 def create(user: dict):
 	user['active'] = False
 	user['avatar'] = None
-	user['username'] = None
+	user['username'] = user['username']
 	user['block_list'] = []
 	user['friend_list'] = []
 	user_ref.document(user['phonenumber']).set(user)
