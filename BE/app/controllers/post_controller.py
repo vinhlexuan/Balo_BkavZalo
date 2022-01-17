@@ -44,8 +44,8 @@ def update_post(id : str, post_req : PostRequest):
 	post_repo.update(id, post_dict)
 	return ResponseModel(code=1000, message='Success', data=post_dict)
 
-def get_list_post(request : ListPostRequest):
-	request_dict = vars(request)
+def get_list_post(list_post_req : ListPostRequest):
+	request_dict = vars(list_post_req)
 	if ('last_id' in request_dict.keys()) and request_dict['last_id'] is not None:
 		if (post_repo.find_by_id(request_dict['last_id']) is None) and (len(request_dict['last_id']) > 0):
 		# raise HTTPException(status_code=400, detail='9992')
