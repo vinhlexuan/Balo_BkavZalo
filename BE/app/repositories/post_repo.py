@@ -7,6 +7,7 @@ def create(post : dict):
 
 	post['created'] = firestore.SERVER_TIMESTAMP
 	post['modified'] = firestore.SERVER_TIMESTAMP
+	post['like'] = []
 	print("created a new post")
 	post_doc = post_ref.document()
 	post['id'] = post_doc.id
@@ -40,3 +41,5 @@ def get_list_post(last_id : str, index : int, count : int):
 def delete_post(post_id : str):
 	post_ref.document(post_id).delete()
 
+def like_post(post_id : str, phonenumber: str):
+	post_ref.document(post_id).update({u'like':firestore.ArrayUnion([phonenumber])})
