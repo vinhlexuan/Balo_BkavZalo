@@ -1,5 +1,5 @@
 # user database
-USER_DB = 'BE\\app\\constants\\serviceAccount.json'
+USER_DB = 'app\\constants\\serviceAccount.json'
 
 ERRORS = {
 	"1001": "Can not connect to DB",
