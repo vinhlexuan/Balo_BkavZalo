@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zalo/subscene/frienddetails/header/diagonally_cut_colored_image.dart';
 import 'package:zalo/models/friend.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,8 +25,17 @@ class SelfDetailHeader extends StatefulWidget {
 class _SelfDetailHeaderState extends State<SelfDetailHeader> {
   static const BACKGROUND_IMAGE = 'images/profile_picture_bg.jpg';
   late File _imageFile;
-
+  String _userid = "";
   final picker = ImagePicker();
+  Future<Map<String, dynamic>> loadState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonInfo = prefs.getString('login_info') ?? "{'user_id': ''}";
+    Map<String, dynamic> userMap = json.decode(jsonInfo);
+    setState(() {
+      _userid = userMap['id'];
+    });
+    return userMap;
+  }
 
   Future pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -47,8 +58,16 @@ class _SelfDetailHeaderState extends State<SelfDetailHeader> {
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
     try {
-      firebaseStorageRef.putFile(_imageFile);
+      await loadState();
+      await firebaseStorageRef.putFile(_imageFile).whenComplete(() => null);
+      firebaseStorageRef.getDownloadURL().then((value) => {
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(_userid)
+                .update({"avatar": value.toString()})
+          });
     } on FirebaseException catch (e) {}
+    ;
   }
 
   Widget _buildDiagonalImageBackground(BuildContext context) {
@@ -90,8 +109,10 @@ class _SelfDetailHeaderState extends State<SelfDetailHeader> {
                         ListTile(
                             title: Text("Chụp ảnh mới"),
                             onTap: () {
-                              pickImage().then(
-                                  (value) => {uploadImageToFirebase(context)});
+                              pickImage()
+                                  .then((value) =>
+                                      {uploadImageToFirebase(context)})
+                                  .then((value) => {print(value)});
                             }),
                         ListTile(
                             title: Text("Chọn ảnh từ máy"),
