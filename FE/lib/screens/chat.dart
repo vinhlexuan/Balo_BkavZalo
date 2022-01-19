@@ -49,8 +49,17 @@ class _ChatPageState extends State<ChatPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Text("Loading");
             }
-            print(_userid);
-            final chat_rooms = snapshot.data!.docs;
+            // final temp = snapshot.data!.docs;
+            final chat_rooms = [];
+            snapshot.data!.docs.forEach((element) {
+              Map<String, dynamic> data =
+                  element.data() as Map<String, dynamic>;
+              if (data['message'].isNotEmpty) {
+                chat_rooms.add(element);
+              }
+              ;
+            });
+            // temp
             // snapshot.data!.docs.forEach((result) {
             //   print(result.data());
             // });
@@ -61,7 +70,7 @@ class _ChatPageState extends State<ChatPage> {
               itemCount: chat_rooms.length,
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 16),
-              physics: NeverScrollableScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 Map<String, dynamic> data =
                     chat_rooms[index].data() as Map<String, dynamic>;
