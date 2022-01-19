@@ -24,7 +24,7 @@ class PostWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Friend fr_temp = new Friend(
-      avatar: '',
+      avatar: post.author.avatar ?? '',
       name: post.author.name ?? 'Anonymous',
       email: '',
       location: 'Ha noi',
