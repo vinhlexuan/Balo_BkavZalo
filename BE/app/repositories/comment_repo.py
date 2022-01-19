@@ -34,3 +34,11 @@ def delete_by_post_id(post_id : str):
     results = query.stream()
     for result in results:
         result.reference.delete()
+
+def find_all_by_post_id(post_id : str):
+    query = comment_ref.where(u'post_id','==',post_id)
+    results = query.stream()
+    length = 0
+    for i in results:
+        length += 1
+    return length

@@ -1,5 +1,5 @@
 from app.schemas.post import ReportPost, PostRequest, ListPostRequest, LikePost
-from app.repositories import post_repo, reported_post_repo, user_repo
+from app.repositories import post_repo, reported_post_repo, user_repo, comment_repo
 from app.auth.auth import AuthHandler
 from app.utils.response import ResponseModel, ErrorResponseModel
 
@@ -115,7 +115,7 @@ def process_post_reponse(id : str, token: str):
 	post_detail_response['created'] = post_res['created']
 	post_detail_response['modified'] = post_res['modified']
 	post_detail_response['like'] = len(post_res['like'])
-	post_detail_response['comment'] = str(post_res['comment']) if 'comment' in post_res else None
+	post_detail_response['comment'] = comment_repo.find_all_by_post_id(id)
 	post_detail_response['is_liked'] = 'false' if  payload['phonenumber'] in post_res['like'] else 'true'
 	post_detail_response['image'] = str(post_res['image']) if 'image' in post_res else None
 	post_detail_response['video'] = str(post_res['video']) if 'video' in post_res else None
