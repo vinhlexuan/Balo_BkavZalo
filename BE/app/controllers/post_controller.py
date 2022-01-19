@@ -20,7 +20,7 @@ def create_post(post_req : PostRequest):
 		'name': author['username'],
 		'avatar' : author['avatar']
 	}
-	post_dict['can_comment'] = True
+	post_dict['can_comment'] = "true"
 	post_dict.pop('token',None)
 	res = post_repo.create(post_dict)
 	return ResponseModel(code=1000, message='Success', data={
@@ -120,7 +120,7 @@ def process_post_reponse(id : str, token: str):
 	post_detail_response['image'] = str(post_res['image']) if 'image' in post_res else None
 	post_detail_response['video'] = str(post_res['video']) if 'video' in post_res else None
 	post_detail_response['author'] = post_res['author']
-	post_detail_response['can_edit'] = 'true' if post_res['author']['id'] ==  cur_user['phonenumber'] else 'false',
-	post_detail_response['is_blocked'] = 'false' if payload['phonenumber'] in cur_user['block_list'] else 'true'
-	post_detail_response['can_comment'] = str(post_res['can_comment'])
+	post_detail_response['can_edit'] = 'true' if post_res['author']['id'] ==  cur_user['phonenumber'] else 'false'
+	post_detail_response['is_blocked'] = 'true' if post_res['author']['id'] in cur_user['block_list'] else 'false'
+	post_detail_response['can_comment'] = 'false' if post_res['author']['id'] in cur_user['block_list'] else 'true'
 	return post_detail_response
