@@ -1,9 +1,10 @@
-import 'dart:convert';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zalo/apis/post_api.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:zalo/models/login_info.dart';
 import 'package:zalo/models/post_v2.dart';
 import 'package:zalo/utils/storeService.dart';
@@ -28,6 +29,34 @@ class _PostPageState extends State<PostPage> {
   bool allLoaded = false;
   int index = 0, count = 20;
   String? lastId = null;
+  late File _imageFile;
+
+  final picker = ImagePicker();
+
+  Future pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _imageFile = File(pickedFile!.path);
+    });
+  }
+
+  Future pickImage2() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imageFile = File(pickedFile!.path);
+    });
+  }
+
+  Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile.path);
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    try {
+      firebaseStorageRef.putFile(_imageFile);
+    } on FirebaseException catch (e) {}
+  }
 
   loadData() async {
     if (allLoaded) return;
@@ -92,7 +121,7 @@ class _PostPageState extends State<PostPage> {
                   controller: _scrollController,
                   itemBuilder: (context, index) {
                     if (index == 0) {
-                      return _buildHeader();
+                      return _buildHeader(context);
                     }
                     if (index == posts.length + 1) {
                       if (allLoaded) {
@@ -116,7 +145,7 @@ class _PostPageState extends State<PostPage> {
         }));
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(context) {
     return Column(
       children: [
         ListTile(
@@ -161,7 +190,34 @@ class _PostPageState extends State<PostPage> {
           children: [
             Expanded(
               child: Container(
-                  child: TextButton(onPressed: () {}, child: Text("Đăng ảnh")),
+                  child: TextButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return new Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(40)),
+                                  elevation: 16,
+                                  insetPadding:
+                                      EdgeInsets.fromLTRB(50, 200, 50, 200),
+                                  child: Column(children: [
+                                    ListTile(
+                                        title: Text("Chụp ảnh mới"),
+                                        onTap: () {
+                                          pickImage().then((value) =>
+                                              {uploadImageToFirebase(context)});
+                                        }),
+                                    ListTile(
+                                        title: Text("Chọn ảnh từ máy"),
+                                        onTap: () {
+                                          pickImage2().then((value) =>
+                                              {uploadImageToFirebase(context)});
+                                        }),
+                                  ]));
+                            });
+                      },
+                      child: Text("Đăng ảnh")),
                   decoration: BoxDecoration(
                       border: Border.all(
                           width: 1.0, color: const Color(0xDDDDDDFF)))),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:zalo/apis/post_api.dart';
 import 'package:zalo/models/post_v2.dart';
+import 'package:zalo/subscene/frienddetails/friend_details_page.dart';
+import 'package:zalo/models/friend.dart';
 
 enum PostRole { owner, viewer }
 
@@ -16,23 +18,42 @@ class PostWidget extends StatelessWidget {
       {required this.post,
       required this.callBack,
       required this.parentContext});
+// void _navigateToFriendDetails(Friend friend, Object avatarTag) {
 
+//   }
   @override
   Widget build(BuildContext context) {
+    Friend fr_temp = new Friend(
+      avatar: '',
+      name: post.author.name ?? 'Anonymous',
+      email: '',
+      location: 'Ha noi',
+    );
     return Container(
       padding: EdgeInsets.all(15.0),
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
-              CircleAvatar(
-                backgroundImage: post.author.avatar != null
-                    ? NetworkImage(post.author.avatar ?? '')
-                    : null,
-                child: post.author.avatar == null
-                    ? Text(post.author.name?.substring(0, 1) ?? 'A')
-                    : null,
-                radius: 20.0,
+              GestureDetector(
+                onTap: () => {
+                  Navigator.of(context).push(
+                    new MaterialPageRoute(
+                      builder: (c) {
+                        return new FriendDetailsPage(fr_temp, avatarTag: '');
+                      },
+                    ),
+                  )
+                },
+                child: CircleAvatar(
+                  backgroundImage: post.author.avatar != null
+                      ? NetworkImage(post.author.avatar ?? '')
+                      : null,
+                  child: post.author.avatar == null
+                      ? Text(post.author.name?.substring(0, 1) ?? 'A')
+                      : null,
+                  radius: 20.0,
+                ),
               ),
               SizedBox(width: 7.0),
               Column(
