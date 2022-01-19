@@ -80,7 +80,7 @@ def like_post(like_post : LikePost):
 		# raise HTTPException(status_code=400, detail='9992')
 		return ErrorResponseModel(None, 9992, message='9992')
 	payload = auth_handle.decode_token(like_post.token)
-	cur_post = post_repo.find_by_id(id)
+	cur_post = post_repo.find_by_id(like_post.id)
 	if payload['phonenumber'] not in cur_post['like']:
 		post_repo.like_post(like_post.id, payload['phonenumber'])
 	else:
