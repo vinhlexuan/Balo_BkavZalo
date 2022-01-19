@@ -151,7 +151,7 @@ class _PostPageState extends State<PostPage> {
         ListTile(
           leading: CircleAvatar(
             backgroundImage: _userInfo?.avatar != null
-                ? NetworkImage(_userInfo?.avatar ?? '')
+                ? NetworkImage(_userInfo?.avatar ?? ' ')
                 : null,
             child: _userInfo?.avatar == null
                 ? Text(_userInfo?.username?.substring(0, 1) ?? 'A')

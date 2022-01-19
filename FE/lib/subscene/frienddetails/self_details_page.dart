@@ -27,38 +27,6 @@ class SelfDetailsPage extends StatefulWidget {
 
 class _SelfDetailsPageState extends State<SelfDetailsPage> {
   final picker = ImagePicker();
-  late File _imageFile;
-
-  Future pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
-    setState(() {
-      _imageFile = File(pickedFile!.path);
-    });
-  }
-
-  Future uploadImageToFirebase(BuildContext context) async {
-//     const storage = getStorage();
-
-// // Create a reference to 'mountains.jpg'
-// const mountainsRef = ref(storage, 'mountains.jpg');
-
-// // Create a reference to 'images/mountains.jpg'
-// const mountainImagesRef = ref(storage, 'images/mountains.jpg');
-    String fileName = basename(_imageFile.path);
-    Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('uploads/$fileName');
-    try {
-      firebaseStorageRef.putFile(_imageFile);
-    } on FirebaseException catch (e) {
-      // e.g, e.code == 'canceled'
-    }
-    // StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
-    // StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    // taskSnapshot.ref.getDownloadURL().then(
-    //       (value) => print("Done: $value"),
-    //     );
-  }
 
   @override
   Widget build(BuildContext context) {
