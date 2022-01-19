@@ -46,13 +46,18 @@ class _SelfDetailsPageState extends State<SelfDetailsPage> {
 // // Create a reference to 'images/mountains.jpg'
 // const mountainImagesRef = ref(storage, 'images/mountains.jpg');
     String fileName = basename(_imageFile.path);
-    firebase_storage.Reference firebaseStorageRef =
-        FirebaseFirestore.instance.ref().child('uploads/$fileName');
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => print("Done: $value"),
-        );
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    try {
+      firebaseStorageRef.putFile(_imageFile);
+    } on FirebaseException catch (e) {
+      // e.g, e.code == 'canceled'
+    }
+    // StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    // StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    // taskSnapshot.ref.getDownloadURL().then(
+    //       (value) => print("Done: $value"),
+    //     );
   }
 
   @override

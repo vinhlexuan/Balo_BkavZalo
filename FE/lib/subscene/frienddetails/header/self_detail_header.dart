@@ -1,15 +1,13 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zalo/screens/chatDetail.dart';
 import 'package:zalo/subscene/frienddetails/header/diagonally_cut_colored_image.dart';
 import 'package:zalo/models/friend.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class SelfDetailHeader extends StatelessWidget {
-  static const BACKGROUND_IMAGE = 'images/profile_picture_bg.jpg';
-
+class SelfDetailHeader extends StatefulWidget {
   SelfDetailHeader(
     this.friend, {
     required this.avatarTag,
@@ -17,6 +15,41 @@ class SelfDetailHeader extends StatelessWidget {
 
   final Friend friend;
   final Object avatarTag;
+
+  @override
+  _SelfDetailHeaderState createState() => new _SelfDetailHeaderState();
+}
+
+class _SelfDetailHeaderState extends State<SelfDetailHeader> {
+  static const BACKGROUND_IMAGE = 'images/profile_picture_bg.jpg';
+  late File _imageFile;
+
+  final picker = ImagePicker();
+
+  Future pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _imageFile = File(pickedFile!.path);
+    });
+  }
+
+  Future pickImage2() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imageFile = File(pickedFile!.path);
+    });
+  }
+
+  Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile.path);
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    try {
+      firebaseStorageRef.putFile(_imageFile);
+    } on FirebaseException catch (e) {}
+  }
 
   Widget _buildDiagonalImageBackground(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -32,14 +65,48 @@ class SelfDetailHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(context) {
     return new Hero(
-      tag: avatarTag,
-      child: new CircleAvatar(
-        backgroundImage: new NetworkImage(friend.avatar),
-        radius: 50.0,
-      ),
-    );
+        tag: widget.avatarTag,
+        child: new GestureDetector(
+          // onTap: () => pickImage(),
+          // onTap: () {
+          //   return Dialog(
+          //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+          //       elevation: 16,
+          //       child: Container()
+          //   );
+          // },
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return new Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40)),
+                      elevation: 16,
+                      insetPadding: EdgeInsets.fromLTRB(50, 200, 50, 200),
+                      child: Column(children: [
+                        ListTile(
+                            title: Text("Chụp ảnh mới"),
+                            onTap: () {
+                              pickImage().then(
+                                  (value) => {uploadImageToFirebase(context)});
+                            }),
+                        ListTile(
+                            title: Text("Chọn ảnh từ máy"),
+                            onTap: () {
+                              pickImage2().then(
+                                  (value) => {uploadImageToFirebase(context)});
+                            }),
+                      ]));
+                });
+          },
+          child: CircleAvatar(
+            backgroundImage: new NetworkImage(widget.friend.avatar),
+            radius: 50.0,
+          ),
+        ));
   }
 
   Widget _buildFollowerInfo(TextTheme textTheme) {
@@ -52,7 +119,7 @@ class SelfDetailHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Text(
-            friend.name,
+            widget.friend.name,
             style: textTheme.headline6!.copyWith(color: Colors.white),
           ),
           // new Text('90 bạn chung', style: followerStyle),
@@ -107,7 +174,7 @@ class SelfDetailHeader extends StatelessWidget {
           heightFactor: 1.4,
           child: new Column(
             children: <Widget>[
-              _buildAvatar(),
+              _buildAvatar(context),
               _buildFollowerInfo(textTheme),
               // _buildActionButtons(theme),
               // ClipRRect(
