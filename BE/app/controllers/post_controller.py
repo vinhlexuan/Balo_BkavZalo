@@ -80,7 +80,11 @@ def like_post(like_post : LikePost):
 		# raise HTTPException(status_code=400, detail='9992')
 		return ErrorResponseModel(None, 9992, message='9992')
 	payload = auth_handle.decode_token(like_post.token)
-	post_repo.like_post(like_post.id, payload['phonenumber'])
+	cur_post = post_repo.find_by_id(id)
+	if payload['phonenumber'] not in cur_post['like']:
+		post_repo.like_post(like_post.id, payload['phonenumber'])
+	else:
+		post_repo.unlike_post(like_post.id, payload['phonenumber'])
 
 
 # post_detail_response = {
@@ -116,7 +120,7 @@ def process_post_reponse(id : str, token: str):
 	post_detail_response['modified'] = post_res['modified']
 	post_detail_response['like'] = len(post_res['like'])
 	post_detail_response['comment'] = comment_repo.find_all_by_post_id(id)
-	post_detail_response['is_liked'] = 'false' if  payload['phonenumber'] in post_res['like'] else 'true'
+	post_detail_response['is_liked'] = 'true' if  payload['phonenumber'] in post_res['like'] else 'false'
 	post_detail_response['image'] = str(post_res['image']) if 'image' in post_res else None
 	post_detail_response['video'] = str(post_res['video']) if 'video' in post_res else None
 	post_detail_response['author'] = post_res['author']

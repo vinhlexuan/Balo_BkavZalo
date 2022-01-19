@@ -43,3 +43,6 @@ def delete_post(post_id : str):
 
 def like_post(post_id : str, phonenumber: str):
 	post_ref.document(post_id).update({u'like':firestore.ArrayUnion([phonenumber])})
+
+def unlike_post(post_id : str, phonenumber: str):
+	post_ref.document(post_id).update({u'like':firestore.ArrayRemove([phonenumber])})
