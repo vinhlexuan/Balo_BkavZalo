@@ -7,10 +7,10 @@ import 'package:zalo/screens/chatDetail.dart';
 import 'package:zalo/subscene/frienddetails/header/diagonally_cut_colored_image.dart';
 import 'package:zalo/models/friend.dart';
 
-class FriendDetailHeader extends StatelessWidget {
+class SelfDetailHeader extends StatelessWidget {
   static const BACKGROUND_IMAGE = 'images/profile_picture_bg.jpg';
 
-  FriendDetailHeader(
+  SelfDetailHeader(
     this.friend, {
     required this.avatarTag,
   });
@@ -110,60 +110,60 @@ class FriendDetailHeader extends StatelessWidget {
               _buildAvatar(),
               _buildFollowerInfo(textTheme),
               // _buildActionButtons(theme),
-              ClipRRect(
-                borderRadius: new BorderRadius.circular(30.0),
-                child: new MaterialButton(
-                  minWidth: 140.0,
-                  color: Colors.transparent,
-                  textColor: Colors.white70,
-                  onPressed: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    String jsonInfo =
-                        prefs.getString('login_info') ?? "{'user_id': ''}";
-                    Map<String, dynamic> userMap = json.decode(jsonInfo);
-                    final data = await FirebaseFirestore.instance
-                        .collection('chat_rooms')
-                        .where('people_array', whereIn: [
-                      [userMap['id'], friend.email],
-                      [friend.email, userMap['id']]
-                    ]).get();
-                    String _id = "";
-                    if (data.docs.isNotEmpty) {
-                      _id = data.docs[0].data()['id'].toString();
-                    } else {
-                      DocumentReference docRef = await FirebaseFirestore
-                          .instance
-                          .collection('chat_rooms')
-                          .doc();
-                      await docRef.set({
-                        'id': docRef.id,
-                        'message': [], // John Doe
-                        'people': [
-                          {'name': userMap['usename'], 'id': userMap['id']},
-                          {'name': friend.name, 'id': friend.email}
-                        ], // Stokes and Sons
-                        'people_array': [userMap['id'], friend.email] // 42
-                      });
-                      final data2 = await FirebaseFirestore.instance
-                          .collection('chat_rooms')
-                          .where('people_array', whereIn: [
-                        [userMap['id'], friend.email],
-                        [friend.email, userMap['id']]
-                      ]).get();
-                      _id = data2.docs[0].data()['id'].toString();
-                      // print(_id);
-                    }
+              // ClipRRect(
+              //   borderRadius: new BorderRadius.circular(30.0),
+              //   child: new MaterialButton(
+              //     minWidth: 140.0,
+              //     color: Colors.transparent,
+              //     textColor: Colors.white70,
+              //     onPressed: () async {
+              //       SharedPreferences prefs =
+              //           await SharedPreferences.getInstance();
+              //       String jsonInfo =
+              //           prefs.getString('login_info') ?? "{'user_id': ''}";
+              //       Map<String, dynamic> userMap = json.decode(jsonInfo);
+              //       final data = await FirebaseFirestore.instance
+              //           .collection('chat_rooms')
+              //           .where('people_array', whereIn: [
+              //         [userMap['id'], friend.email],
+              //         [friend.email, userMap['id']]
+              //       ]).get();
+              //       String _id = "";
+              //       if (data.docs.isNotEmpty) {
+              //         _id = data.docs[0].data()['id'].toString();
+              //       } else {
+              //         DocumentReference docRef = await FirebaseFirestore
+              //             .instance
+              //             .collection('chat_rooms')
+              //             .doc();
+              //         await docRef.set({
+              //           'id': docRef.id,
+              //           'message': [], // John Doe
+              //           'people': [
+              //             {'name': userMap['usename'], 'id': userMap['id']},
+              //             {'name': friend.name, 'id': friend.email}
+              //           ], // Stokes and Sons
+              //           'people_array': [userMap['id'], friend.email] // 42
+              //         });
+              //         final data2 = await FirebaseFirestore.instance
+              //             .collection('chat_rooms')
+              //             .where('people_array', whereIn: [
+              //           [userMap['id'], friend.email],
+              //           [friend.email, userMap['id']]
+              //         ]).get();
+              //         _id = data2.docs[0].data()['id'].toString();
+              //         // print(_id);
+              //       }
 
-                    Navigator.push(context, MaterialPageRoute(builder: (
-                      context,
-                    ) {
-                      return ChatDetailPage(name: _id);
-                    }));
-                  },
-                  child: new Text('Tin nhan'),
-                ),
-              ),
+              //       Navigator.push(context, MaterialPageRoute(builder: (
+              //         context,
+              //       ) {
+              //         return ChatDetailPage(name: _id);
+              //       }));
+              //     },
+              //     child: new Text('Tin nhan'),
+              //   ),
+              // ),
             ],
           ),
         ),

@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zalo/models/friend.dart';
 import 'package:zalo/screens/intro.dart';
+import 'package:zalo/subscene/frienddetails/friend_details_page.dart';
+import 'package:zalo/subscene/frienddetails/self_details_page.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -10,27 +13,38 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String _username = "Họ tên";
+  String _username = "";
   String? _avatar = null;
 
   @override
   void initState() {
-    loadState();
     super.initState();
+    loadState();
   }
 
-  void loadState() async {
+  Future<Map<String, dynamic>> loadState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String jsonInfo =
-        prefs.getString('user_info') ?? "{'username': 'Anonymous'}";
-
+    String jsonInfo = prefs.getString('login_info') ?? "{'user_id': ''}";
     Map<String, dynamic> userMap = json.decode(jsonInfo);
-    print(userMap);
     setState(() {
-      _username = userMap['username'] ?? 'Anonymous';
+      _username = userMap['usename'] ?? 'Anonymous';
       _avatar = userMap['avatar'];
     });
+    return userMap;
   }
+
+  // void loadState() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String jsonInfo =
+  //       prefs.getString('user_info') ?? "{'username': 'Anonymous'}";
+
+  //   Map<String, dynamic> userMap = json.decode(jsonInfo);
+  //   print(userMap);
+  //   setState(() {
+  //     _username = userMap['usename'] ?? 'Anonymous';
+  //     _avatar = userMap['avatar'];
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +76,32 @@ class _ProfilePageState extends State<ProfilePage> {
     //         ])
     //       ]))
     // ])));
+    Friend fr_temp = new Friend(
+      avatar: '',
+      name: _username,
+      email: '',
+      location: 'Ha noi',
+    );
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
         children: [
           ListTile(
             title: Text(_username),
-            onTap: () {},
+            onTap: () => {
+              Navigator.of(context).push(
+                new MaterialPageRoute(
+                  builder: (c) {
+                    return new SelfDetailsPage(fr_temp, avatarTag: '');
+                  },
+                ),
+              )
+            },
             leading: CircleAvatar(
               backgroundImage:
                   _avatar != null ? NetworkImage(_avatar ?? '') : null,
-              child: _avatar == null ? Text(_username.substring(0, 1)) : null,
+              // child: _avatar == null ? Text(_username.substring(0, 1)) : null,
+              child: _avatar == null ? Text("A") : null,
               radius: 20.0,
             ),
           ),
